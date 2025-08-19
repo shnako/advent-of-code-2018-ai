@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/shnak/advent-of-code-2018-go/solutions/day01"
+	"github.com/shnako/advent-of-code-2018-ai/solutions/day01"
 )
 
 func main() {

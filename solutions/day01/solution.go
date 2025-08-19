@@ -13,6 +13,7 @@
 package day01
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -43,6 +44,9 @@ func (s *Solution) Part2() (int, error) {
 	changes, err := s.parseChanges()
 	if err != nil {
 		return 0, err
+	}
+	if len(changes) == 0 {
+		return 0, errors.New("no frequency changes provided")
 	}
 
 	frequency := 0

@@ -11,7 +11,8 @@
       "Bash(go test:*)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(gh api:*)"
     ],
     "deny": [],
     "ask": []
