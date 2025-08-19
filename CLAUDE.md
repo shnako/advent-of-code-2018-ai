@@ -19,7 +19,11 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 7. **Submit Part 1**: Immediately submit using `go run cmd/submit/main.go -day=X -part=1 -answer=Y`
 8. **Verify submission**: Check if the answer was correct
 9. **If correct, fetch Part 2**: The puzzle.txt will be updated automatically when Part 1 is solved
+    - **CRITICAL**: Do NOT implement Part 2 before submitting Part 1 successfully 
+    - **WAIT** for Part 1 submission confirmation before reading Part 2 problem
+    - Only implement what is explicitly stated in the current puzzle.txt
 10. **Implement Part 2**: Update solution.go with Part 2 solution
+    - **ONLY AFTER** Part 1 is confirmed correct and Part 2 is available
 11. **Test Part 2**: Run with any Part 2 examples
 12. **Run Part 2**: Execute with the full input
 13. **Submit Part 2**: Immediately submit the Part 2 answer
@@ -28,20 +32,27 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 16. **Create Pull Request**: Create PR with comprehensive description of the solution
 17. **CodeRabbit Review Cycle (Automated)**: 
     - Wait 3 minutes initially for CodeRabbit to start its review
-    - Check every minute for new comments using:
-      - `gh api repos/owner/repo/pulls/PR_NUMBER/comments` (review comments on diff lines)
-      - `gh api repos/owner/repo/issues/ISSUE_NUMBER/comments` (general PR discussion comments)
-    - Once CodeRabbit comments are detected, address ALL comments by making necessary code changes
+    - Check every minute for new comments using `gh pr view PR_NUMBER --comments`
+    - **DISTINGUISH between summary and actual review**:
+      - **SUMMARY ONLY**: If CodeRabbit only provides a walkthrough/summary without specific code feedback, WAIT for the actual review
+      - **ACTUAL REVIEW**: Look for specific code review comments with suggestions, improvements, or issues
+    - **RATE LIMIT HANDLING**: If CodeRabbit indicates rate limit exceeded:
+      - Wait for the specified time (usually 1-5 minutes)
+      - Post comment `@coderabbitai review` to trigger manual review
+      - Wait for CodeRabbit to respond and provide feedback
+    - **ONLY PROCEED when CodeRabbit provides ACTUAL CODE REVIEW**:
+      - Look for specific line-by-line comments with actionable feedback
+      - Ignore initial summary/walkthrough - this is NOT the review
+      - CodeRabbit will provide specific suggestions, optimizations, or issues to address
+    - Once CodeRabbit's ACTUAL review comments are detected, address ALL comments by making necessary code changes
     - Push changes to the feature branch
-    - Reply to CodeRabbit conversations using:
-      - `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments/COMMENT_ID/replies` (reply to review comments)
-      - `gh api -X POST repos/owner/repo/issues/ISSUE_NUMBER/comments` (general PR comments)
-    - **RESOLVE conversations** that have been adequately addressed using `gh api`
     - **CRITICAL**: After EVERY push, CodeRabbit will re-review and potentially add NEW comments
     - Continue checking every minute for NEW CodeRabbit comments after each push
+    - **USE POWERSHELL FOR WAITING**: Use `powershell -command "Start-Sleep -Seconds 60"` for non-interactive waits
     - **DO NOT assume review is complete** after addressing initial comments - wait for re-review
-    - Repeat this automated cycle until CodeRabbit stops adding new substantive comments
-    - Only proceed to merge when CodeRabbit has no more feedback after latest push
+    - Repeat this automated cycle until CodeRabbit stops adding new substantive review comments
+    - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
+    - **DO NOT MERGE after just a summary** - wait for the complete review process
     - **DO NOT STOP**: This process should be fully automated without user intervention
 18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR using "Squash and merge"
 19. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
@@ -52,7 +63,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Did I run all tests successfully?
     - Is the code clean, idiomatic Go with proper error handling?
     - Have I followed all Go best practices outlined in this document?
-    - Did I complete the full CodeRabbit review cycle?
+    - Did I complete the full CodeRabbit review cycle (actual review, not just summary)?
     - Did I merge the PR successfully?
 20. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
 21. **Continue to next day**: Automatically proceed to the next day without stopping
