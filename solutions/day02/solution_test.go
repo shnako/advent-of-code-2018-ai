@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+func readInput(t *testing.T) string {
+	t.Helper()
+	b, err := os.ReadFile("input.txt")
+	if err != nil {
+		t.Fatalf("Failed to read input: %v", err)
+	}
+	return string(b)
+}
+
 func TestPart1Examples(t *testing.T) {
 	input := `abcdef
 bababc
@@ -52,12 +61,7 @@ wvxyz`
 }
 
 func TestPart1(t *testing.T) {
-	input, err := os.ReadFile("input.txt")
-	if err != nil {
-		t.Fatalf("Failed to read input: %v", err)
-	}
-	
-	solution := New(string(input))
+	solution := New(readInput(t))
 	result, err := solution.Part1()
 	
 	if err != nil {
@@ -72,12 +76,7 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	input, err := os.ReadFile("input.txt")
-	if err != nil {
-		t.Fatalf("Failed to read input: %v", err)
-	}
-	
-	solution := New(string(input))
+	solution := New(readInput(t))
 	result, err := solution.Part2()
 	
 	if err != nil {

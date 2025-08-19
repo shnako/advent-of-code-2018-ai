@@ -11,6 +11,7 @@
 package day02
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -23,31 +24,33 @@ func New(input string) *Solution {
 }
 
 func (s *Solution) Part1() (int, error) {
-	lines := strings.Split(s.input, "\n")
-	
+	lines := s.parseLines()
+
 	twos := 0
 	threes := 0
-	
+
 	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if line == "" {
-			continue
-		}
 		
-		counts := make(map[rune]int)
-		for _, char := range line {
-			counts[char]++
+		var counts [26]int
+		for i := 0; i < len(line); i++ {
+			c := line[i]
+			idx := int(c - 'a')
+			if idx >= 0 && idx < 26 {
+				counts[idx]++
+			}
 		}
-		
+
 		hasTwo := false
 		hasThree := false
-		
 		for _, count := range counts {
 			if count == 2 {
 				hasTwo = true
 			}
 			if count == 3 {
 				hasThree = true
+			}
+			if hasTwo && hasThree {
+				break
 			}
 		}
 		
@@ -73,7 +76,7 @@ func (s *Solution) Part2() (string, error) {
 		}
 	}
 	
-	return "", nil
+	return "", errors.New("no pair of IDs differing by exactly one character was found")
 }
 
 func (s *Solution) parseLines() []string {
@@ -110,6 +113,7 @@ func diffByOne(a, b string) bool {
 
 func commonLetters(a, b string) string {
 	var result strings.Builder
+	result.Grow(len(a))
 	
 	for i := 0; i < len(a) && i < len(b); i++ {
 		if a[i] == b[i] {
