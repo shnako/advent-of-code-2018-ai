@@ -43,7 +43,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Repeat this automated cycle until CodeRabbit stops adding new substantive comments
     - Only proceed to merge when CodeRabbit has no more feedback after latest push
     - **DO NOT STOP**: This process should be fully automated without user intervention
-18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR
+18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR using "Squash and merge"
 19. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
     - Did I implement and test both parts?
