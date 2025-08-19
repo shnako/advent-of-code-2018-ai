@@ -19,7 +19,11 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 7. **Submit Part 1**: Immediately submit using `go run cmd/submit/main.go -day=X -part=1 -answer=Y`
 8. **Verify submission**: Check if the answer was correct
 9. **If correct, fetch Part 2**: The puzzle.txt will be updated automatically when Part 1 is solved
+    - **CRITICAL**: Do NOT implement Part 2 before submitting Part 1 successfully 
+    - **WAIT** for Part 1 submission confirmation before reading Part 2 problem
+    - Only implement what is explicitly stated in the current puzzle.txt
 10. **Implement Part 2**: Update solution.go with Part 2 solution
+    - **ONLY AFTER** Part 1 is confirmed correct and Part 2 is available
 11. **Test Part 2**: Run with any Part 2 examples
 12. **Run Part 2**: Execute with the full input
 13. **Submit Part 2**: Immediately submit the Part 2 answer
