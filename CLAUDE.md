@@ -12,19 +12,30 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
    - Puzzle: `https://adventofcode.com/2018/day/X`
    - Input: `https://adventofcode.com/2018/day/X/input`
 2. **Read and understand**: Read the puzzle.txt to understand the problem
-3. **Implement Part 1**: Write the solution in solution.go
-4. **Test Part 1**: Run with the example from puzzle.txt using `go test`
-5. **Run Part 1**: Execute with the full input.txt using `go run .`
-6. **Submit Part 1**: Immediately submit using `go run cmd/submit/main.go -day=X -part=1 -answer=Y`
-7. **Verify submission**: Check if the answer was correct
-8. **If correct, fetch Part 2**: The puzzle.txt will be updated automatically when Part 1 is solved
-9. **Implement Part 2**: Update solution.go with Part 2 solution
-10. **Test Part 2**: Run with any Part 2 examples
-11. **Run Part 2**: Execute with the full input
-12. **Submit Part 2**: Immediately submit the Part 2 answer
-13. **Run final tests**: Ensure all tests pass with `go test`
-14. **Update progress**: Mark day as complete in progress tracking
-15. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
+3. **Create feature branch**: Create a new branch for the day's work (e.g., `feature/day-X`)
+4. **Implement Part 1**: Write the solution in solution.go
+5. **Test Part 1**: Run with the example from puzzle.txt using `go test`
+6. **Run Part 1**: Execute with the full input.txt using `go run .`
+7. **Submit Part 1**: Immediately submit using `go run cmd/submit/main.go -day=X -part=1 -answer=Y`
+8. **Verify submission**: Check if the answer was correct
+9. **If correct, fetch Part 2**: The puzzle.txt will be updated automatically when Part 1 is solved
+10. **Implement Part 2**: Update solution.go with Part 2 solution
+11. **Test Part 2**: Run with any Part 2 examples
+12. **Run Part 2**: Execute with the full input
+13. **Submit Part 2**: Immediately submit the Part 2 answer
+14. **Run final tests**: Ensure all tests pass with `go test`
+15. **Update progress**: Mark day as complete in progress tracking
+16. **Create Pull Request**: Create PR with comprehensive description of the solution
+17. **CodeRabbit Review Cycle**: 
+    - Wait for CodeRabbit to provide automated PR comments
+    - Address ALL CodeRabbit comments by making necessary code changes
+    - Push changes to the feature branch
+    - Reply to CodeRabbit conversations explaining the changes made
+    - Resolve conversations that have been adequately addressed
+    - Wait for CodeRabbit to re-review and provide additional comments
+    - Repeat this cycle until CodeRabbit is satisfied (no more substantive comments)
+18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR
+19. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
     - Did I implement and test both parts?
     - Did I submit both answers immediately?
@@ -32,8 +43,10 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Did I run all tests successfully?
     - Is the code clean, idiomatic Go with proper error handling?
     - Have I followed all Go best practices outlined in this document?
-16. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
-17. **Continue to next day**: Automatically proceed to the next day without stopping
+    - Did I complete the full CodeRabbit review cycle?
+    - Did I merge the PR successfully?
+20. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
+21. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
 - **Never stop between days**: Continue solving until all 25 days are complete
@@ -492,7 +505,12 @@ Based on Advent of Code 2018:
 - [ ] Solution follows Go best practices (error handling, naming conventions)
 - [ ] Code is clean without debug statements
 - [ ] Solution runs in reasonable time (< 5 seconds)
-- [ ] All steps 1-17 from the workflow have been executed
+- [ ] Feature branch created for the day's work
+- [ ] Pull Request created with comprehensive description
+- [ ] CodeRabbit review cycle completed successfully
+- [ ] All CodeRabbit comments addressed and resolved
+- [ ] Pull Request merged to main branch
+- [ ] All steps 1-21 from the workflow have been executed
 
 ## Completion Criteria
 The full 2018 challenge is considered complete when:
