@@ -24,7 +24,8 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 12. **Submit Part 2**: Immediately submit the Part 2 answer
 13. **Run final tests**: Ensure all tests pass with `go test`
 14. **Update progress**: Mark day as complete in progress tracking
-15. **Continue to next day**: Automatically proceed to the next day without stopping
+15. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
+16. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
 - **Never stop between days**: Continue solving until all 25 days are complete
@@ -34,6 +35,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 - **Continue to Part 2 automatically** after Part 1 is confirmed correct
 - **Handle wrong answers**: If an answer is wrong, debug and try again
 - **Complete all 25 days**: Don't stop until all puzzles are solved
+- **Context Management**: After completing each day, use `/compact` to minimize context before proceeding
 
 ## Go Project Structure
 ```
