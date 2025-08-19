@@ -10,7 +10,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 |-----|--------|----------|-------|-------|-------------|
 | 01  | [Day 01: Chronal Calibration](https://adventofcode.com/2018/day/1) | [solution.go](solutions/day01/solution.go) | [solution_test.go](solutions/day01/solution_test.go) | [input.txt](solutions/day01/input.txt) | [puzzle.txt](solutions/day01/puzzle.txt) |
 | 02  | [Day 02: Inventory Management System](https://adventofcode.com/2018/day/2) | [solution.go](solutions/day02/solution.go) | [solution_test.go](solutions/day02/solution_test.go) | [input.txt](solutions/day02/input.txt) | [puzzle.txt](solutions/day02/puzzle.txt) |
-| 03  | [Day 03](https://adventofcode.com/2018/day/3) | - | - | - | - |
+| 03  | [Day 03: No Matter How You Slice It](https://adventofcode.com/2018/day/3) | [solution.go](solutions/day03/solution.go) | [solution_test.go](solutions/day03/solution_test.go) | [input.txt](solutions/day03/input.txt) | [puzzle.txt](solutions/day03/puzzle.txt) |
 | 04  | [Day 04](https://adventofcode.com/2018/day/4) | - | - | - | - |
 | 05  | [Day 05](https://adventofcode.com/2018/day/5) | - | - | - | - |
 | 06  | [Day 06](https://adventofcode.com/2018/day/6) | - | - | - | - |
