@@ -73,7 +73,7 @@ func fetchContent(url, sessionCookie string, isHTML bool) (string, error) {
 	}
 
 	req.Header.Set("Cookie", fmt.Sprintf("session=%s", sessionCookie))
-	req.Header.Set("User-Agent", "github.com/shnak/advent-of-code-2018-go")
+	req.Header.Set("User-Agent", "github.com/shnako/advent-of-code-2018-ai")
 
 	resp, err := client.Do(req)
 	if err != nil {
