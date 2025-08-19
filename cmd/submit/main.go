@@ -54,7 +54,7 @@ func main() {
 
 	req.Header.Set("Cookie", fmt.Sprintf("session=%s", sessionCookie))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("User-Agent", "github.com/shnak/advent-of-code-2018-go")
+	req.Header.Set("User-Agent", "github.com/shnako/advent-of-code-2018-ai")
 
 	// Submit answer
 	resp, err := client.Do(req)
