@@ -1,0 +1,86 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+        
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+      
+    - name: Download dependencies
+      run: go mod download
+      
+    - name: Run tests with coverage
+      run: |
+        go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+        echo "Test execution completed"
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.out
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        
+    - name: Generate test report
+      run: |
+        go install github.com/jstemmer/go-junit-report/v2@latest
+        go test -v ./... 2>&1 | go-junit-report -set-exit-code > test-report.xml
+      if: always()
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: test-report.xml
+        
+    - name: Test Summary
+      uses: test-summary/action@v2
+      with:
+        paths: |
+          test-report.xml
+      if: always()
+      
+    - name: Benchmark tests
+      run: |
+        echo "Running benchmark tests..."
+        go test -bench=. -benchmem ./solutions/... | tee benchmark-results.txt
+        echo "Benchmark tests completed"
+      continue-on-error: true
+      
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: benchmark-results
+        path: benchmark-results.txt
+        
+    - name: Check for race conditions
+      run: |
+        echo "Checking for race conditions..."
+        go test -race ./...
+        echo "✅ No race conditions detected"

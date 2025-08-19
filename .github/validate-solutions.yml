@@ -1,0 +1,149 @@
+name: Validate Solutions
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'solutions/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+        
+    - name: Validate puzzle.txt formatting and completion
+      run: |
+        echo "Checking puzzle.txt file formatting and completion status..."
+        failed=0
+        
+        for file in solutions/day*/puzzle.txt; do
+          if [ -f "$file" ]; then
+            echo "Checking $file"
+            
+            # Check if first line is a URL
+            first_line=$(head -1 "$file")
+            if ! [[ "$first_line" =~ ^https://adventofcode.com/2018/day/[0-9]+$ ]]; then
+              echo "❌ $file: First line should be the Advent of Code 2018 URL"
+              failed=1
+            fi
+            
+            # Check if second line is empty
+            second_line=$(sed -n '2p' "$file")
+            if [ -n "$second_line" ]; then
+              echo "❌ $file: Second line should be empty"
+              failed=1
+            fi
+            
+            # Check if third line is NOT empty (should contain the title)
+            third_line=$(sed -n '3p' "$file")
+            if [ -z "$third_line" ]; then
+              echo "❌ $file: Third line should contain the problem title"
+              failed=1
+            elif ! [[ "$third_line" =~ ^---\ Day\ [0-9]+:\ .+\ ---$ ]]; then
+              echo "❌ $file: Third line should match format '--- Day X: Title ---'"
+              failed=1
+            else
+              # Check if last line indicates puzzle completion
+              last_line=$(tail -1 "$file")
+              if [[ "$last_line" != "Both parts of this puzzle are complete! They provide two gold stars: **" ]]; then
+                echo "❌ $file: Last line should be 'Both parts of this puzzle are complete! They provide two gold stars: **'"
+                echo "   Found: '$last_line'"
+                failed=1
+              else
+                echo "✅ $file: Format is correct and puzzle is complete"
+              fi
+            fi
+          fi
+        done
+        
+        if [ $failed -eq 1 ]; then
+          echo "❌ Validation failed!"
+          exit 1
+        else
+          echo "✅ All puzzle.txt files are correctly formatted"
+        fi
+        
+    - name: Validate solution files exist
+      run: |
+        echo "Checking that all required solution files exist..."
+        failed=0
+        
+        for day in $(seq -f "%02g" 1 25); do
+          if [ -d "solutions/day$day" ]; then
+            echo "Checking day$day..."
+            
+            # Check solution.go exists
+            if [ ! -f "solutions/day$day/solution.go" ]; then
+              echo "❌ Missing: solutions/day$day/solution.go"
+              failed=1
+            fi
+            
+            # Check solution_test.go exists
+            if [ ! -f "solutions/day$day/solution_test.go" ]; then
+              echo "❌ Missing: solutions/day$day/solution_test.go"
+              failed=1
+            fi
+            
+            # Check input.txt exists
+            if [ ! -f "solutions/day$day/input.txt" ]; then
+              echo "❌ Missing: solutions/day$day/input.txt"
+              failed=1
+            fi
+            
+            # Check puzzle.txt exists
+            if [ ! -f "solutions/day$day/puzzle.txt" ]; then
+              echo "❌ Missing: solutions/day$day/puzzle.txt"
+              failed=1
+            fi
+            
+            # Check main.go exists (for running the solution standalone)
+            if [ ! -f "solutions/day$day/main.go" ]; then
+              echo "❌ Missing: solutions/day$day/main.go"
+              failed=1
+            fi
+            
+            if [ $failed -eq 0 ]; then
+              echo "✅ day$day: All required files present"
+            fi
+          fi
+        done
+        
+        if [ $failed -eq 1 ]; then
+          echo "❌ Validation failed!"
+          exit 1
+        else
+          echo "✅ All solution files are present"
+        fi
+        
+    - name: Check Go formatting
+      run: |
+        echo "Checking Go code formatting..."
+        unformatted=$(gofmt -l solutions/)
+        if [ -n "$unformatted" ]; then
+          echo "❌ The following files are not properly formatted:"
+          echo "$unformatted"
+          echo ""
+          echo "Please run 'go fmt ./...' to format them"
+          exit 1
+        else
+          echo "✅ All Go files are properly formatted"
+        fi
+        
+    - name: Run go vet
+      run: |
+        echo "Running go vet to check for common issues..."
+        go vet ./...
+        echo "✅ No issues found by go vet"
+        
+    - name: Run solution tests
+      run: |
+        echo "Running tests for all solutions..."
+        go test ./solutions/... -v
