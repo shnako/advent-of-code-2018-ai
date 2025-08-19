@@ -34,14 +34,21 @@ func (s *Solution) Part2() (int, error) {
 	
 	// Try removing each unit type (a/A, b/B, c/C, etc.)
 	for r := 'a'; r <= 'z'; r++ {
-		// Create polymer without this unit type
+		// Skip if neither lower nor upper case exists to save work
+		if !strings.ContainsRune(s.input, r) && !strings.ContainsRune(s.input, unicode.ToUpper(r)) {
+			continue
+		}
+
+		// Create polymer without this unit type and react
 		filtered := s.removeUnitType(s.input, r)
-		
-		// React the filtered polymer
 		length := s.reactPolymer(filtered)
-		
+
 		if length < minLength {
 			minLength = length
+			// Can't beat zero; short-circuit
+			if minLength == 0 {
+				break
+			}
 		}
 	}
 	
@@ -82,9 +89,10 @@ func (s *Solution) removeUnitType(polymer string, unitType rune) string {
 	result.Grow(len(polymer)) // Pre-allocate capacity
 	
 	for _, unit := range polymer {
-		if unicode.ToLower(unit) != unitType {
-			result.WriteRune(unit)
+		if unicode.ToLower(unit) == unitType {
+			continue
 		}
+		result.WriteRune(unit)
 	}
 	
 	return result.String()

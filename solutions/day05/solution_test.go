@@ -55,7 +55,7 @@ func TestPart2Examples(t *testing.T) {
 		return
 	}
 
-	expected := 4 // After removing 'c/C', result is "daDA" which reacts to "da" = 4 units
+	expected := 4 // After removing 'c/C', fully reacting gives "daDA" (no further reactions), length 4
 	if result != expected {
 		t.Errorf("Part2() = %v, want %v", result, expected)
 	}

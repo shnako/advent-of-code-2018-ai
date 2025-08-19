@@ -48,6 +48,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Push changes to the feature branch
     - **CRITICAL**: After EVERY push, CodeRabbit will re-review and potentially add NEW comments
     - Continue checking every minute for NEW CodeRabbit comments after each push
+    - **USE POWERSHELL FOR WAITING**: Use `powershell -command "Start-Sleep -Seconds 60"` for non-interactive waits
     - **DO NOT assume review is complete** after addressing initial comments - wait for re-review
     - Repeat this automated cycle until CodeRabbit stops adding new substantive review comments
     - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
