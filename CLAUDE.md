@@ -37,6 +37,14 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 - **Complete all 25 days**: Don't stop until all puzzles are solved
 - **Context Management**: After completing each day, use `/compact` to minimize context before proceeding
 
+### Handling Rate Limits:
+If the user's daily allowance is exceeded:
+1. **Save Progress**: Note which day/part was last completed in the conversation
+2. **User Action**: User should close the session and return when limits reset
+3. **Resume**: When returning, user can use `--resume` flag or say "Continue from Day X Part Y"
+4. **State Recovery**: Check the README.md progress table and solutions/ directory to determine where to continue
+5. **Continue Solving**: Resume from the exact point where we stopped
+
 ## Go Project Structure
 ```
 advent-of-code-2018-go/
@@ -512,6 +520,13 @@ go vet ./...
 4. Handle any errors and retry as needed
 5. Update progress tracking after each day
 6. Only stop when all 25 days are complete or if explicitly told to stop
+
+**RESUMING**: When user says "continue", "resume", or "continue from Day X":
+1. Check the solutions/ directory to see which days are already complete
+2. Read the README.md to verify progress
+3. Identify the next unsolved day/part
+4. Continue solving from that point forward
+5. Follow the same workflow as initial solving
 
 Remember: The user has NO Go experience, so:
 - Explain Go-specific concepts when they appear
