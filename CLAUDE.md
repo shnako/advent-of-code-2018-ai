@@ -24,8 +24,16 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 12. **Submit Part 2**: Immediately submit the Part 2 answer
 13. **Run final tests**: Ensure all tests pass with `go test`
 14. **Update progress**: Mark day as complete in progress tracking
-15. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
-16. **Continue to next day**: Automatically proceed to the next day without stopping
+15. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
+    - Did I fetch both puzzle and input?
+    - Did I implement and test both parts?
+    - Did I submit both answers immediately?
+    - Did I update the README progress table?
+    - Did I run all tests successfully?
+    - Is the code clean, idiomatic Go with proper error handling?
+    - Have I followed all Go best practices outlined in this document?
+16. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
+17. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
 - **Never stop between days**: Continue solving until all 25 days are complete
@@ -36,6 +44,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 - **Handle wrong answers**: If an answer is wrong, debug and try again
 - **Complete all 25 days**: Don't stop until all puzzles are solved
 - **Context Management**: After completing each day, use `/compact` to minimize context before proceeding
+- **Quality Assurance**: Step 15 MUST be completed - verify full compliance with this document before moving on
 
 ### Handling Rate Limits:
 If the user's daily allowance is exceeded:
@@ -475,6 +484,16 @@ Based on Advent of Code 2018:
 - **Combat simulation**: Turn-based systems, pathfinding
 - **Assembly programs**: Instruction parsing, register manipulation
 
+## Daily Completion Checklist
+**MANDATORY**: Before marking any day as complete, verify:
+- [ ] Both parts solved and submitted
+- [ ] All tests pass with `go test`
+- [ ] README.md updated with correct links and status
+- [ ] Solution follows Go best practices (error handling, naming conventions)
+- [ ] Code is clean without debug statements
+- [ ] Solution runs in reasonable time (< 5 seconds)
+- [ ] All steps 1-17 from the workflow have been executed
+
 ## Completion Criteria
 The full 2018 challenge is considered complete when:
 1. All 25 days are solved (both parts each)
@@ -483,6 +502,7 @@ The full 2018 challenge is considered complete when:
 4. README is updated with all solutions and results
 5. All helper utilities are properly documented
 6. Performance is reasonable (each solution runs in < 5 seconds)
+7. Daily Completion Checklist verified for each day
 
 ## Tool Commands Summary
 ```bash
