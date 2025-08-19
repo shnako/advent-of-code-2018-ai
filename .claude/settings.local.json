@@ -6,7 +6,11 @@
       "Bash(go list:*)",
       "Bash(test:*)",
       "Bash(grep:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(go run:*)",
+      "Bash(go test:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

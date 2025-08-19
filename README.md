@@ -8,7 +8,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 
 | Day | Puzzle | Solution | Tests | Input | Description |
 |-----|--------|----------|-------|-------|-------------|
-| 01  | [Day 01](https://adventofcode.com/2018/day/1) | - | - | - | - |
+| 01  | [Day 01: Chronal Calibration](https://adventofcode.com/2018/day/1) | [solution.go](solutions/day01/solution.go) | [solution_test.go](solutions/day01/solution_test.go) | [input.txt](solutions/day01/input.txt) | [puzzle.txt](solutions/day01/puzzle.txt) |
 | 02  | [Day 02](https://adventofcode.com/2018/day/2) | - | - | - | - |
 | 03  | [Day 03](https://adventofcode.com/2018/day/3) | - | - | - | - |
 | 04  | [Day 04](https://adventofcode.com/2018/day/4) | - | - | - | - |
