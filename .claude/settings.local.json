@@ -27,7 +27,11 @@
       "Bash(mkdir:*)",
       "Bash(sleep:*)",
       "Bash(echo:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(timeout:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(powershell:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []
