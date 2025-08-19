@@ -27,7 +27,9 @@ type Solution struct {
 }
 
 func New(input string) *Solution {
-	lines := strings.Split(strings.TrimSpace(input), "\n")
+	// Handle both Unix (\n) and Windows (\r\n) line endings
+	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
+	lines := strings.Split(input, "\n")
 	coordinates := make([]Point, 0, len(lines))
 	
 	for _, line := range lines {
