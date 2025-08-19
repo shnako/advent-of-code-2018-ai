@@ -26,14 +26,16 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 14. **Run final tests**: Ensure all tests pass with `go test`
 15. **Update progress**: Mark day as complete in progress tracking
 16. **Create Pull Request**: Create PR with comprehensive description of the solution
-17. **CodeRabbit Review Cycle**: 
-    - Wait for CodeRabbit to provide automated PR comments
-    - Address ALL CodeRabbit comments by making necessary code changes
+17. **CodeRabbit Review Cycle (Automated)**: 
+    - Wait 3 minutes initially for CodeRabbit to start its review
+    - Check every minute using `gh api repos/owner/repo/pulls/PR_NUMBER/comments` for new comments
+    - Once CodeRabbit comments are detected, address ALL comments by making necessary code changes
     - Push changes to the feature branch
-    - Reply to CodeRabbit conversations explaining the changes made
-    - Resolve conversations that have been adequately addressed
-    - Wait for CodeRabbit to re-review and provide additional comments
-    - Repeat this cycle until CodeRabbit is satisfied (no more substantive comments)
+    - Reply to CodeRabbit conversations using `gh api` explaining the changes made
+    - Resolve conversations that have been adequately addressed using `gh api`
+    - Continue checking every minute for CodeRabbit re-review comments
+    - Repeat this automated cycle until CodeRabbit is satisfied (no more substantive comments)
+    - **DO NOT STOP**: This process should be fully automated without user intervention
 18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR
 19. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
@@ -49,15 +51,16 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 21. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
-- **Never stop between days**: Continue solving until all 25 days are complete
+- **Never stop during the entire process**: Continue solving until all 25 days are complete
 - **The fetch command downloads BOTH puzzle and input** using the session cookie
 - **input.txt contains your personal puzzle input** (different for each user)
 - **Always submit immediately** when you have an answer (don't wait for user confirmation)
 - **Continue to Part 2 automatically** after Part 1 is confirmed correct
 - **Handle wrong answers**: If an answer is wrong, debug and try again
-- **Complete all 25 days**: Don't stop until all puzzles are solved
+- **Automated PR Review**: Wait and check for CodeRabbit comments automatically, don't stop for user input
+- **Complete all 25 days**: Don't stop until all puzzles are solved and all PRs are merged
 - **Context Management**: After completing each day, use `/compact` to minimize context before proceeding
-- **Quality Assurance**: Step 15 MUST be completed - verify full compliance with this document before moving on
+- **Quality Assurance**: All steps 1-21 MUST be completed - verify full compliance with this document before moving on
 
 ### Handling Rate Limits:
 If the user's daily allowance is exceeded:
