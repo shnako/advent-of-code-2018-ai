@@ -65,7 +65,10 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Have I followed all Go best practices outlined in this document?
     - Did I complete the full CodeRabbit review cycle (actual review, not just summary)?
     - Did I merge the PR successfully?
-20. **COMPACT CONTEXT**: After completing each day, use the `/compact` command to reduce context size
+20. **COMPACT CONTEXT**: **MANDATORY** after completing each day - use the `/compact` command to reduce context size
+    - **CRITICAL**: This must be done after merging each day's PR and before starting the next day
+    - Context compacting prevents memory overflow and maintains performance across all 25 days
+    - **DO NOT** proceed to the next day without compacting first
 21. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
