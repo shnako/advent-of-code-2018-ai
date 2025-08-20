@@ -40,7 +40,8 @@
       "WebFetch(domain:www.reddit.com)",
       "WebSearch",
       "WebFetch(domain:todd.ginsberg.com)",
-      "WebFetch(domain:www.michaelfogleman.com)"
+      "WebFetch(domain:www.michaelfogleman.com)",
+      "Bash(gh pr checks:*)"
     ],
     "deny": [],
     "ask": []

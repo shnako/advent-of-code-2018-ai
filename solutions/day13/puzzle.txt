@@ -134,8 +134,6 @@ In this example, the location of the first crash is `*7,3*`.
 
 Your puzzle answer was `109,23`.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---There isn't much you can do to prevent crashes in this ridiculous system. However, by predicting the crashes, the Elves know where to be in advance and *instantly remove the two crashing carts* the moment any crash occurs.
 
 They can proceed like this for a while, but eventually, they're going to run out of carts. It could be useful to figure out where the last cart that *hasn't* crashed will end up.

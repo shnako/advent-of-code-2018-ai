@@ -84,7 +84,8 @@ type Solution struct {
 }
 
 func New(input string) *Solution {
-	return &Solution{input: strings.TrimSpace(input)}
+	// Do NOT trim input - leading spaces are significant for grid coordinates!
+	return &Solution{input: input}
 }
 
 func (s *Solution) Part1() (string, error) {
