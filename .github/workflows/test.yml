@@ -42,51 +42,32 @@ jobs:
         try { go mod download -x } catch { Write-Host "No dependencies to download" }
         Write-Host "✅ Dependencies step completed"
       
-    - name: Check and install GCC if needed
-      shell: bash
+    - name: Check GCC availability
+      shell: pwsh
       id: gcc-setup
       run: |
-        if command -v gcc >/dev/null 2>&1; then
-          echo "✅ GCC is already available: $(gcc --version | head -1)"
-          echo "gcc_available=true" >> $GITHUB_OUTPUT
-        else
-          echo "⚠️ GCC not available - attempting to install..."
-          
-          # Try to install GCC using chocolatey (common on Windows self-hosted runners)
-          if command -v choco >/dev/null 2>&1; then
-            echo "Installing GCC via Chocolatey..."
-            choco install mingw -y --no-progress 2>/dev/null || echo "Chocolatey installation failed"
-            
-            # Refresh PATH and check again
-            export PATH="/c/tools/mingw64/bin:$PATH"
-            if command -v gcc >/dev/null 2>&1; then
-              echo "✅ GCC successfully installed via Chocolatey: $(gcc --version | head -1)"
-              echo "gcc_available=true" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-          fi
-          
-          # Try winget as backup (Windows Package Manager)
-          if command -v winget >/dev/null 2>&1; then
-            echo "Installing GCC via winget..."
-            winget install --id=MSYS2.MSYS2 -e --silent 2>/dev/null || echo "winget installation failed"
-            
-            # Add MSYS2 to PATH and install gcc
-            export PATH="/c/msys64/mingw64/bin:/c/msys64/usr/bin:$PATH"
-            if [ -x "/c/msys64/usr/bin/pacman.exe" ]; then
-              /c/msys64/usr/bin/pacman.exe -S --noconfirm mingw-w64-x86_64-gcc 2>/dev/null || echo "pacman gcc install failed"
-            fi
-            
-            if command -v gcc >/dev/null 2>&1; then
-              echo "✅ GCC successfully installed via winget/MSYS2: $(gcc --version | head -1)"
-              echo "gcc_available=true" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-          fi
-          
-          echo "❌ Failed to install GCC automatically - race detection will be skipped"
-          echo "gcc_available=false" >> $GITHUB_OUTPUT
-        fi
+        $gccAvailable = $false
+        
+        # Check if GCC is already available
+        try {
+          $gccVersion = gcc --version 2>$null | Select-Object -First 1
+          if ($gccVersion) {
+            Write-Host "✅ GCC is already available: $gccVersion"
+            $gccAvailable = $true
+          } else {
+            Write-Host "⚠️ GCC not available - race detection will be skipped"
+          }
+        }
+        catch {
+          Write-Host "⚠️ GCC not available - race detection will be skipped"
+        }
+        
+        # Set output for subsequent steps
+        if ($gccAvailable) {
+          "gcc_available=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        } else {
+          "gcc_available=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        }
         
     - name: Run basic tests first
       shell: pwsh
@@ -107,29 +88,31 @@ jobs:
         try { go install golang.org/x/tools/cmd/covdata@latest } catch { Write-Host "Failed to install covdata, continuing without it" }
         
     - name: Run tests with coverage and race detection
-      shell: bash
+      shell: pwsh
       env:
         CGO_ENABLED: 1
       run: |
-        if [ "${{ steps.gcc-setup.outputs.gcc_available }}" == "true" ]; then
-          echo "Running tests with race detection and coverage..."
-          if go test -v -race -coverprofile=coverage.out -covermode=atomic ./...; then
-            echo "✅ Test execution completed with race detection"
-          else
-            echo "❌ Tests failed with race detection, trying without..."
-            go test -v -coverprofile=coverage.out -covermode=atomic ./... || echo "Tests failed"
-          fi
-        else
-          echo "Running tests with coverage (no race detection due to missing GCC)..."
-          go test -v -coverprofile=coverage.out -covermode=atomic ./... || echo "Tests failed"
-          echo "✅ Test execution completed without race detection"
-        fi
+        if ("${{ steps.gcc-setup.outputs.gcc_available }}" -eq "true") {
+          Write-Host "Running tests with race detection and coverage..."
+          try {
+            go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+            Write-Host "✅ Test execution completed with race detection"
+          }
+          catch {
+            Write-Host "❌ Tests failed with race detection, trying without..."
+            try { go test -v -coverprofile=coverage.out -covermode=atomic ./... } catch { Write-Host "Tests failed" }
+          }
+        } else {
+          Write-Host "Running tests with coverage (no race detection due to missing GCC)..."
+          try { go test -v -coverprofile=coverage.out -covermode=atomic ./... } catch { Write-Host "Tests failed" }
+          Write-Host "✅ Test execution completed without race detection"
+        }
         
         # Ensure coverage.out exists for upload
-        if [ ! -f coverage.out ]; then
-          echo "Creating empty coverage file..."
-          touch coverage.out
-        fi
+        if (!(Test-Path "coverage.out")) {
+          Write-Host "Creating empty coverage file..."
+          New-Item -Path "coverage.out" -ItemType File -Force | Out-Null
+        }
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
@@ -229,15 +212,15 @@ jobs:
         path: ${{ github.workspace }}/benchmark-results.txt
         
     - name: Check for race conditions
-      shell: bash
+      shell: pwsh
       env:
         CGO_ENABLED: 1
       run: |
-        if [ "${{ steps.gcc-setup.outputs.gcc_available }}" == "true" ]; then
-          echo "Checking for race conditions..."
+        if ("${{ steps.gcc-setup.outputs.gcc_available }}" -eq "true") {
+          Write-Host "Checking for race conditions..."
           go test -race ./...
-          echo "✅ No race conditions detected"
-        else
-          echo "⚠️ Skipping race condition check - GCC not available"
-          echo "✅ Race condition check skipped"
-        fi
+          Write-Host "✅ No race conditions detected"
+        } else {
+          Write-Host "⚠️ Skipping race condition check - GCC not available"
+          Write-Host "✅ Race condition check skipped"
+        }
