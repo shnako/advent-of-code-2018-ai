@@ -35,9 +35,9 @@ jobs:
         go-version: '1.21'
         cache: false
         
-    - name: Cache Go modules
-      uses: actions/cache@v4
-      timeout-minutes: 1
+    - name: Restore Go modules cache
+      uses: actions/cache/restore@v4
+      id: cache-restore
       continue-on-error: true
       with:
         path: |
@@ -45,7 +45,6 @@ jobs:
         key: ${{ runner.os }}-go-mod-${{ hashFiles('go.mod') }}
         restore-keys: |
           ${{ runner.os }}-go-mod-
-        save-always: true
       
     - name: Download dependencies
       shell: pwsh
@@ -146,17 +145,18 @@ jobs:
           Write-Host "Coverage file created: $((Get-Item $coverageFile).Length) bytes"
         }
       
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      continue-on-error: true
-      with:
-        file: ${{ github.workspace }}/coverage.out
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        disable_search: true
-        verbose: true
-        use_legacy_upload_endpoint: true
+    - name: Coverage report summary
+      shell: pwsh
+      if: always()
+      run: |
+        $coverageFile = "$env:GITHUB_WORKSPACE\coverage.out"
+        if (Test-Path $coverageFile) {
+          $size = (Get-Item $coverageFile).Length
+          Write-Host "✅ Coverage file generated: $size bytes"
+          Write-Host "📊 Coverage data available for local analysis"
+        } else {
+          Write-Host "⚠️ No coverage file generated"
+        }
         
     - name: Generate test report
       shell: pwsh
@@ -188,6 +188,14 @@ jobs:
       with:
         name: test-results
         path: ${{ github.workspace }}/test-report.xml
+        
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      if: always()
+      continue-on-error: true
+      with:
+        name: coverage-report
+        path: ${{ github.workspace }}/coverage.out
         
     - name: Test Summary
       uses: test-summary/action@v2
@@ -225,6 +233,15 @@ jobs:
         name: benchmark-results
         path: ${{ github.workspace }}/benchmark-results.txt
         
+    - name: Save Go modules cache
+      uses: actions/cache/save@v4
+      if: always() && steps.cache-restore.outputs.cache-hit != 'true'
+      continue-on-error: true
+      with:
+        path: |
+          ~\go\pkg\mod
+        key: ${{ runner.os }}-go-mod-${{ hashFiles('go.mod') }}
+        
     - name: Workflow Summary
       shell: pwsh
       if: always()
@@ -232,6 +249,7 @@ jobs:
         Write-Host "🎯 Workflow Summary"
         Write-Host "=================="
         Write-Host "✅ Go setup: $(if ((go version 2>$null)) { 'Success' } else { 'Failed' })"
+        Write-Host "✅ Cache: $(if ('${{ steps.cache-restore.outputs.cache-hit }}' -eq 'true') { 'Hit' } else { 'Miss' })"
         Write-Host "✅ Tests: Basic tests executed"
         Write-Host "✅ Coverage: $(if (Test-Path '$env:GITHUB_WORKSPACE\coverage.out') { 'Generated' } else { 'Not generated' })"
         Write-Host "✅ Race Detection: $('${{ steps.gcc-setup.outputs.gcc_available }}' -eq 'true' ? 'Enabled' : 'Disabled (no GCC)')"
