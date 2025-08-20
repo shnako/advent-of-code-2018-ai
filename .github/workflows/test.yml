@@ -14,20 +14,36 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Check Go installation
+      shell: pwsh
+      id: go-check
+      run: |
+        try {
+          $goVersion = go version
+          Write-Host "✅ Go is already available: $goVersion"
+          "go_installed=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        }
+        catch {
+          Write-Host "⚠️ Go not found, will install"
+          "go_installed=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        }
+    
     - name: Set up Go
+      if: steps.go-check.outputs.go_installed != 'true'
       uses: actions/setup-go@v5
       with:
         go-version: '1.21'
+        cache: false
         
     - name: Cache Go modules
       uses: actions/cache@v4
-      timeout-minutes: 2
+      timeout-minutes: 1
       continue-on-error: true
       with:
         path: |
           ~\go\pkg\mod
           ~\AppData\Local\go-build
-        key: ${{ runner.os }}-go-${{ hashFiles('go.mod', 'go.sum') }}
+        key: ${{ runner.os }}-go-${{ hashFiles('go.mod') }}
         restore-keys: |
           ${{ runner.os }}-go-
       
