@@ -1,21 +1,19 @@
-// +build ignore
-
 package main
 
 import (
 	"fmt"
 	"log"
 	"os"
-	. "github.com/shnako/advent-of-code-2018-ai/solutions/day20"
+	"github.com/shnako/advent-of-code-2018-ai/solutions/day20"
 )
 
 func main() {
-	input, err := os.ReadFile("input.txt")
+	input, err := os.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatalf("Failed to read input: %v", err)
 	}
 	
-	solution := New(string(input))
+	solution := day20.New(string(input))
 	
 	part1, err := solution.Part1()
 	if err != nil {
