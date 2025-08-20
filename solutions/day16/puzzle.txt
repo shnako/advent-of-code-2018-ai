@@ -62,9 +62,10 @@ Equality testing:
 Unfortunately, while the manual gives the *name* of each opcode, it doesn't seem to indicate the *number*. However, you can monitor the CPU to see the contents of the registers before and after instructions are executed to try to work them out.  Each opcode has a number from `0` through `15`, but the manual doesn't say which is which. For example, suppose you capture the following sample:
 
 ```
-Before: [3, 2, 1, 1]
+`Before: [3, 2, 1, 1]
 9 2 1 2
 After:  [3, 2, 2, 1]
+`
 ```
 
 This sample shows the effect of the instruction `9 2 1 2` on the registers. Before the instruction is executed, register `0` has value `3`, register `1` has value `2`, and registers `2` and `3` have value `1`. After the instruction is executed, register `2`'s value becomes `2`.
@@ -85,8 +86,10 @@ Ignoring the opcode numbers, *how many samples in your puzzle input behave like 
 
 Your puzzle answer was `636`.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---Using the samples you collected, work out the number of each opcode and execute the test program (the second section of your puzzle input).
 
 *What value is contained in register `0` after executing the test program?*
+
+Your puzzle answer was `674`.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
