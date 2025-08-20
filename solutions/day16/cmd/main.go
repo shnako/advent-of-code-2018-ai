@@ -5,16 +5,16 @@ import (
 	"log"
 	"os"
 
-	"github.com/shnako/advent-of-code-2018-ai/solutions/day03"
+	"github.com/shnako/advent-of-code-2018-ai/solutions/day16"
 )
 
 func main() {
-	input, err := os.ReadFile("../input.txt")
+	input, err := os.ReadFile("input.txt")
 	if err != nil {
 		log.Fatalf("Failed to read input: %v", err)
 	}
 
-	solution := day03.New(string(input))
+	solution := day16.New(string(input))
 
 	part1, err := solution.Part1()
 	if err != nil {

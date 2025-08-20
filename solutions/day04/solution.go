@@ -1,10 +1,10 @@
 /*
  * Day 4: Repose Record
- * 
+ *
  * Part 1: Find the guard that has the most minutes asleep, then find what minute
  * that guard spends asleep the most. Return the product of guard ID and minute.
  * Parse timestamped guard records to track sleep patterns and find the sleepiest guard.
- * 
+ *
  * Part 2: Find the guard most frequently asleep on the same minute across all days.
  * Return the product of that guard's ID and the minute they're most often asleep.
  */
@@ -29,9 +29,9 @@ const (
 )
 
 type Event struct {
-	Time     time.Time
-	Type     EventType
-	GuardID  int
+	Time    time.Time
+	Type    EventType
+	GuardID int
 }
 
 type GuardSleep struct {

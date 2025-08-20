@@ -1,11 +1,11 @@
 /*
  * Day 14: Chocolate Charts
- * 
+ *
  * Part 1: Simulate the recipe generation process and find the scores of the ten recipes
  * immediately after the number of recipes specified in the puzzle input.
  * Two elves start with recipes scoring 3 and 7, and create new recipes by combining their
  * current recipes' scores and adding the digits of the sum to the scoreboard.
- * 
+ *
  * Part 2: Find how many recipes appear on the scoreboard to the left of the sequence
  * that matches the puzzle input digits.
  */
@@ -31,7 +31,7 @@ func (s *Solution) Part1() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	// Start with recipes 3 and 7; preallocate to target+10 to reduce reallocations
 	capacity := target + 12 // a small buffer above target+10
 	if capacity < 2 {
@@ -40,24 +40,24 @@ func (s *Solution) Part1() (string, error) {
 	recipes := make([]int, 0, capacity)
 	recipes = append(recipes, 3, 7)
 	elf1, elf2 := 0, 1
-	
+
 	// Continue until we have at least target + 10 recipes
 	for len(recipes) < target+10 {
 		// Create new recipes from sum of current recipes
 		sum := recipes[elf1] + recipes[elf2]
-		
+
 		// Add digits of sum to recipes
 		if sum >= 10 {
 			recipes = append(recipes, sum/10, sum%10)
 		} else {
 			recipes = append(recipes, sum)
 		}
-		
+
 		// Move elves to new positions
 		elf1 = (elf1 + 1 + recipes[elf1]) % len(recipes)
 		elf2 = (elf2 + 1 + recipes[elf2]) % len(recipes)
 	}
-	
+
 	// Get the ten recipes after target recipes
 	var b strings.Builder
 	b.Grow(10)
@@ -73,7 +73,7 @@ func (s *Solution) Part2() (int, error) {
 	if targetLen == 0 {
 		return 0, fmt.Errorf("empty input")
 	}
-	
+
 	// Convert target string to slice of ints for comparison
 	target := make([]int, targetLen)
 	for i, char := range targetStr {
@@ -82,16 +82,16 @@ func (s *Solution) Part2() (int, error) {
 		}
 		target[i] = int(char - '0')
 	}
-	
+
 	// Start with recipes 3 and 7
 	recipes := []int{3, 7}
 	elf1, elf2 := 0, 1
-	
+
 	// Continue until we find the target sequence
 	for {
 		// Create new recipes from sum of current recipes
 		sum := recipes[elf1] + recipes[elf2]
-		
+
 		// Add digits of sum to recipes and check after each addition
 		if sum >= 10 {
 			recipes = append(recipes, sum/10)
@@ -99,7 +99,7 @@ func (s *Solution) Part2() (int, error) {
 			if len(recipes) >= targetLen && s.matchesTarget(recipes, target, len(recipes)-targetLen) {
 				return len(recipes) - targetLen, nil
 			}
-			
+
 			recipes = append(recipes, sum%10)
 			// Check again after adding the second digit
 			if len(recipes) >= targetLen && s.matchesTarget(recipes, target, len(recipes)-targetLen) {
@@ -112,7 +112,7 @@ func (s *Solution) Part2() (int, error) {
 				return len(recipes) - targetLen, nil
 			}
 		}
-		
+
 		// Move elves to new positions
 		elf1 = (elf1 + 1 + recipes[elf1]) % len(recipes)
 		elf2 = (elf2 + 1 + recipes[elf2]) % len(recipes)

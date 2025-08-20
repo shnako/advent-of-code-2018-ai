@@ -14,15 +14,15 @@ func TestPart1Examples(t *testing.T) {
 #..G#E#
 #.....#
 #######`
-	
+
 	solution := New(input1)
 	result, err := solution.Part1()
-	
+
 	if err != nil {
 		t.Errorf("Part1() error = %v", err)
 		return
 	}
-	
+
 	expected := 27730 // 47 rounds × 590 HP
 	if result != expected {
 		t.Errorf("Part1() = %v, want %v", result, expected)
@@ -47,7 +47,7 @@ func TestPart1AdditionalExamples(t *testing.T) {
 			36334, // 37 rounds × 982 HP
 		},
 		{
-			"Example 3", 
+			"Example 3",
 			`#######
 #E..EG#
 #.#G.E#
@@ -93,17 +93,17 @@ func TestPart1AdditionalExamples(t *testing.T) {
 			18740, // 20 rounds × 937 HP
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			solution := New(test.input)
 			result, err := solution.Part1()
-			
+
 			if err != nil {
 				t.Errorf("Part1() error = %v", err)
 				return
 			}
-			
+
 			if result != test.expected {
 				t.Errorf("Part1() = %v, want %v", result, test.expected)
 			}
@@ -140,7 +140,7 @@ func TestPart2Examples(t *testing.T) {
 			31284, // 4 attack power, 33 rounds × 948 HP
 		},
 		{
-			"Example 3", 
+			"Example 3",
 			`#######
 #E.G#.#
 #.#G..#
@@ -175,17 +175,17 @@ func TestPart2Examples(t *testing.T) {
 			1140, // 34 attack power, 30 rounds × 38 HP
 		},
 	}
-	
+
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			solution := New(test.input)
 			result, err := solution.Part2()
-			
+
 			if err != nil {
 				t.Errorf("Part2() error = %v", err)
 				return
 			}
-			
+
 			if result != test.expected {
 				t.Errorf("Part2() = %v, want %v", result, test.expected)
 			}
@@ -198,15 +198,15 @@ func TestPart1(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read input: %v", err)
 	}
-	
+
 	solution := New(string(input))
 	result, err := solution.Part1()
-	
+
 	if err != nil {
 		t.Errorf("Part1() error = %v", err)
 		return
 	}
-	
+
 	expected := 224370 // Confirmed correct
 	if result != expected {
 		t.Errorf("Part1() = %v, want %v", result, expected)
@@ -218,15 +218,15 @@ func TestPart2(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read input: %v", err)
 	}
-	
+
 	solution := New(string(input))
 	result, err := solution.Part2()
-	
+
 	if err != nil {
 		t.Errorf("Part2() error = %v", err)
 		return
 	}
-	
+
 	expected := 45539 // Confirmed correct
 	if result != expected {
 		t.Errorf("Part2() = %v, want %v", result, expected)

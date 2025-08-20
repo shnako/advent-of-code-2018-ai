@@ -8,7 +8,7 @@ import (
 func ParseInts(input string) ([]int, error) {
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 	nums := make([]int, 0, len(lines))
-	
+
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
 		if line == "" {
@@ -20,14 +20,14 @@ func ParseInts(input string) ([]int, error) {
 		}
 		nums = append(nums, n)
 	}
-	
+
 	return nums, nil
 }
 
 func ParseIntsFromString(s string, sep string) ([]int, error) {
 	parts := strings.Split(s, sep)
 	nums := make([]int, 0, len(parts))
-	
+
 	for _, part := range parts {
 		part = strings.TrimSpace(part)
 		if part == "" {
@@ -39,7 +39,7 @@ func ParseIntsFromString(s string, sep string) ([]int, error) {
 		}
 		nums = append(nums, n)
 	}
-	
+
 	return nums, nil
 }
 

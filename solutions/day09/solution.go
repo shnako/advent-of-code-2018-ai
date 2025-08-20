@@ -1,11 +1,11 @@
 /*
  * Day 9: Marble Mania
- * 
+ *
  * Part 1: Simulate a marble game with circular placement and special scoring rules.
- * Players take turns placing marbles in a circle. Normal marbles are placed between 
- * marbles 1 and 2 positions clockwise. Marbles divisible by 23 score points and 
+ * Players take turns placing marbles in a circle. Normal marbles are placed between
+ * marbles 1 and 2 positions clockwise. Marbles divisible by 23 score points and
  * remove a marble 7 positions counter-clockwise.
- * 
+ *
  * Part 2: Same game but with 100 times more marbles, requiring efficient data structure.
  * Uses circular doubly-linked list for O(1) insertion and removal operations.
  */
@@ -32,10 +32,10 @@ type Solution struct {
 func New(input string) *Solution {
 	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
 	parts := strings.Fields(input)
-	
+
 	players, _ := strconv.Atoi(parts[0])
 	lastMarble, _ := strconv.Atoi(parts[6])
-	
+
 	return &Solution{
 		players:    players,
 		lastMarble: lastMarble,
@@ -53,27 +53,27 @@ func (s *Solution) Part2() (int, error) {
 // playGame simulates the marble game and returns the highest score
 func (s *Solution) playGame(maxMarble int) int {
 	scores := make([]int, s.players)
-	
+
 	// Create initial marble 0
 	current := &Marble{value: 0}
 	current.next = current
 	current.prev = current
-	
+
 	for marble := 1; marble <= maxMarble; marble++ {
 		player := (marble - 1) % s.players
-		
+
 		if marble%23 == 0 {
 			// Special case: marble divisible by 23
 			scores[player] += marble
-			
+
 			// Move 7 positions counter-clockwise
 			for i := 0; i < 7; i++ {
 				current = current.prev
 			}
-			
+
 			// Add the marble being removed to score
 			scores[player] += current.value
-			
+
 			// Remove the marble and update current
 			current.prev.next = current.next
 			current.next.prev = current.prev
@@ -91,7 +91,7 @@ func (s *Solution) playGame(maxMarble int) int {
 			current = newMarble
 		}
 	}
-	
+
 	// Find maximum score
 	maxScore := 0
 	for _, score := range scores {
@@ -99,6 +99,6 @@ func (s *Solution) playGame(maxMarble int) int {
 			maxScore = score
 		}
 	}
-	
+
 	return maxScore
 }

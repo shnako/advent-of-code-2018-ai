@@ -51,28 +51,35 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - **NEVER MERGE while CodeRabbit shows "Currently processing new changes" or similar processing messages**
       - **WAIT until CodeRabbit fully completes its review** - processing messages indicate incomplete review
     - **CRITICAL: MANDATORY ADDRESS ALL FEEDBACK**: Once CodeRabbit's ACTUAL review comments are detected, you MUST address ALL comments by making necessary code changes
+      - **FIRST STEP - REPLY TO COMMENTS**: Before making any code changes, REPLY to each CodeRabbit review comment acknowledging it and explaining how you will address it
+      - **SECOND STEP - MAKE CODE CHANGES**: After replying to all comments, make the necessary code changes to fix all issues, suggestions, and improvements
       - **NEVER SKIP FEEDBACK**: Every single piece of actionable feedback must be addressed before merging
       - **NO EXCEPTIONS**: CodeRabbit feedback is not optional - it must all be implemented
-      - Make the required code changes to fix all issues, suggestions, and improvements
       - **DO NOT PROCEED TO BUILD/MERGE without addressing feedback first**
     - Push changes to the feature branch after addressing all feedback
     - **CRITICAL**: After EVERY push, CodeRabbit will automatically re-review and potentially add NEW comments
+    - **ABSOLUTE REQUIREMENT**: After EVERY SINGLE COMMIT you make to the PR, you MUST wait for CodeRabbit to provide NEW review comments and address ALL of them before proceeding
+    - **NEVER SKIP WAITING**: Even if you think your fix is minor, CodeRabbit WILL re-review and may have additional feedback
+    - **MANDATORY WAIT CYCLE**: After each commit: 1) Wait for CodeRabbit processing to complete, 2) Wait for actual review comments, 3) Address ALL feedback, 4) Only then proceed to next step
     - **ONLY REQUEST REVIEW AFTER RATE LIMITS**: Post `@coderabbitai review` ONLY when rate limits have been encountered - normal pushes trigger automatic review
     - **AFTER RATE LIMIT RECOVERY**: When rate limit expires, MUST post `@coderabbitai review` to actually get the review - waiting without requesting is pointless
     - Continue checking every minute for NEW CodeRabbit comments after each push
     - **USE POWERSHELL FOR WAITING**: Use `powershell -command "Start-Sleep -Seconds 60"` for non-interactive waits
     - **DO NOT assume review is complete** after addressing initial comments - wait for re-review
+    - **CRITICAL VIOLATION**: Attempting to merge while CodeRabbit has pending feedback or is still processing is a MAJOR WORKFLOW VIOLATION
     - Repeat this automated cycle until CodeRabbit stops adding new substantive review comments
     - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
     - **DO NOT MERGE after just a summary** - wait for the complete review process
     - **DO NOT MERGE while CodeRabbit is still processing** - wait for processing to complete fully
     - **DO NOT STOP**: This process should be fully automated without user intervention
-18. **Verify builds and tests**: **CRITICAL - ALL MUST PASS**: After addressing all CodeRabbit feedback, ensure builds and tests pass
+18. **Verify ALL CI checks pass**: **CRITICAL - ALL THREE CHECKS MUST PASS**: After addressing all CodeRabbit feedback, ensure ALL CI checks pass
     - **MANDATORY**: Run `go build ./...` to verify the entire project builds successfully
     - **MANDATORY**: Run `go test ./...` to verify all tests pass across the project
-    - **STOP IF ANY FAILURES**: Fix any build errors or test failures before proceeding to merge
-    - **NO MERGE until 100% success**: Both build and test commands must complete without any errors
-19. **Merge PR**: **ONLY** after CodeRabbit review is complete, all feedback addressed, builds pass, and tests pass, merge the PR using "Squash and merge"
+    - **MANDATORY**: Ensure validation check passes - fix ANY puzzle.txt formatting issues across ALL days
+    - **THREE REQUIRED CHECKS**: 1) Tests must pass, 2) Validation must pass, 3) CodeRabbit must complete
+    - **STOP IF ANY FAILURES**: Fix any build errors, test failures, OR validation failures before proceeding to merge
+    - **NO MERGE until 100% success**: All three CI checks (test, validate, CodeRabbit) must be green/passing
+19. **Merge PR**: **ONLY** after ALL THREE CI checks pass (test=SUCCESS, validate=SUCCESS, CodeRabbit=SUCCESS), merge the PR using "Squash and merge"
 20. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
     - Did I implement and test both parts?
