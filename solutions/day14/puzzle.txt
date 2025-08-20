@@ -62,3 +62,5 @@ The first half of this puzzle is complete! It provides one gold star: *
 - `59414` first appears after `2018` recipes.
 
 *How many recipes appear on the scoreboard to the left of the score sequence in your puzzle input?*
+
+Both parts of this puzzle are complete! They provide two gold stars: **
