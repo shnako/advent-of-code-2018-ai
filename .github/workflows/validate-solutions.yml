@@ -141,12 +141,14 @@ jobs:
         fi
         
     - name: Run go vet
+      shell: bash
       run: |
         echo "Running go vet to check for common issues..."
         go vet ./...
         echo "✅ No issues found by go vet"
         
     - name: Run solution tests
+      shell: bash
       run: |
         echo "Running tests for all solutions..."
         go test ./solutions/... -v
