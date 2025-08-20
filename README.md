@@ -26,7 +26,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 16  | [Day 16: Chronal Classification](https://adventofcode.com/2018/day/16) | [solution.go](solutions/day16/solution.go) | [solution_test.go](solutions/day16/solution_test.go) | [input.txt](solutions/day16/input.txt) | [puzzle.txt](solutions/day16/puzzle.txt) |
 | 17  | [Day 17: Reservoir Research](https://adventofcode.com/2018/day/17) | [solution.go](solutions/day17/solution.go) | [solution_test.go](solutions/day17/solution_test.go) | [input.txt](solutions/day17/input.txt) | [puzzle.txt](solutions/day17/puzzle.txt) |
 | 18  | [Day 18: Settlers of The North Pole](https://adventofcode.com/2018/day/18) | [solution.go](solutions/day18/solution.go) | [solution_test.go](solutions/day18/solution_test.go) | [input.txt](solutions/day18/input.txt) | [puzzle.txt](solutions/day18/puzzle.txt) |
-| 19  | [Day 19](https://adventofcode.com/2018/day/19) | - | - | - | - |
+| 19  | [Day 19: Go With The Flow](https://adventofcode.com/2018/day/19) | [solution.go](solutions/day19/solution.go) | [solution_test.go](solutions/day19/solution_test.go) | [input.txt](solutions/day19/input.txt) | [puzzle.txt](solutions/day19/puzzle.txt) |
 | 20  | [Day 20](https://adventofcode.com/2018/day/20) | - | - | - | - |
 | 21  | [Day 21](https://adventofcode.com/2018/day/21) | - | - | - | - |
 | 22  | [Day 22](https://adventofcode.com/2018/day/22) | - | - | - | - |
