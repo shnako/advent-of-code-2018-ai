@@ -141,26 +141,30 @@ jobs:
     - name: Generate test report
       shell: bash
       run: |
+        echo "Current working directory: $(pwd)"
         echo "Installing go-junit-report..."
         go install github.com/jstemmer/go-junit-report/v2@latest || echo "Failed to install go-junit-report"
         
         echo "Generating test report..."
         # Create a basic test report regardless of test results
-        (go test -v ./... 2>&1 || echo "Tests completed with errors") | (go-junit-report > test-report.xml 2>/dev/null || echo "go-junit-report failed")
+        TEST_REPORT_PATH="$GITHUB_WORKSPACE/test-report.xml"
+        (go test -v ./... 2>&1 || echo "Tests completed with errors") | (go-junit-report > "$TEST_REPORT_PATH" 2>/dev/null || echo "go-junit-report failed")
         
         # Ensure we always have a test report file
-        if [ ! -f test-report.xml ] || [ ! -s test-report.xml ]; then
-          echo "Creating fallback test report..."
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > test-report.xml
-          echo '<testsuites>' >> test-report.xml
-          echo '  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">' >> test-report.xml
-          echo '    <testcase name="workflow-executed" classname="github-actions" time="0"/>' >> test-report.xml
-          echo '  </testsuite>' >> test-report.xml
-          echo '</testsuites>' >> test-report.xml
+        if [ ! -f "$TEST_REPORT_PATH" ] || [ ! -s "$TEST_REPORT_PATH" ]; then
+          echo "Creating fallback test report at $TEST_REPORT_PATH..."
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > "$TEST_REPORT_PATH"
+          echo '<testsuites>' >> "$TEST_REPORT_PATH"
+          echo '  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">' >> "$TEST_REPORT_PATH"
+          echo '    <testcase name="workflow-executed" classname="github-actions" time="0"/>' >> "$TEST_REPORT_PATH"
+          echo '  </testsuite>' >> "$TEST_REPORT_PATH"
+          echo '</testsuites>' >> "$TEST_REPORT_PATH"
         fi
         
         echo "Test report file created:"
-        ls -la test-report.xml
+        ls -la "$TEST_REPORT_PATH"
+        echo "File contents:"
+        head -5 "$TEST_REPORT_PATH" || echo "No content to show"
         echo "✅ Test report generation completed"
       if: always()
       
@@ -169,13 +173,13 @@ jobs:
       if: always()
       with:
         name: test-results
-        path: test-report.xml
+        path: ${{ github.workspace }}/test-report.xml
         
     - name: Test Summary
       uses: test-summary/action@v2
       with:
         paths: |
-          test-report.xml
+          ${{ github.workspace }}/test-report.xml
       if: always()
       
     - name: Benchmark tests
@@ -184,24 +188,25 @@ jobs:
         echo "Running benchmark tests..."
         
         # Always create the benchmark results file
-        touch benchmark-results.txt
+        BENCHMARK_PATH="$GITHUB_WORKSPACE/benchmark-results.txt"
+        touch "$BENCHMARK_PATH"
         
         # Run benchmarks and capture output
-        if go test -bench=. -benchmem ./solutions/... > benchmark-results.txt 2>&1; then
+        if go test -bench=. -benchmem ./solutions/... > "$BENCHMARK_PATH" 2>&1; then
           echo "✅ Benchmarks completed successfully"
         else
-          echo "No benchmarks found or benchmarks failed" > benchmark-results.txt
+          echo "No benchmarks found or benchmarks failed" > "$BENCHMARK_PATH"
         fi
         
         # Ensure file is not empty
-        if [ ! -s benchmark-results.txt ]; then
-          echo "No benchmark results generated" > benchmark-results.txt
+        if [ ! -s "$BENCHMARK_PATH" ]; then
+          echo "No benchmark results generated" > "$BENCHMARK_PATH"
         fi
         
         echo "Benchmark results file:"
-        ls -la benchmark-results.txt
+        ls -la "$BENCHMARK_PATH"
         echo "Content preview:"
-        head -10 benchmark-results.txt || echo "No content to preview"
+        head -10 "$BENCHMARK_PATH" || echo "No content to preview"
         echo "✅ Benchmark tests completed"
       continue-on-error: true
       
@@ -210,7 +215,7 @@ jobs:
       if: always()
       with:
         name: benchmark-results
-        path: benchmark-results.txt
+        path: ${{ github.workspace }}/benchmark-results.txt
         
     - name: Check for race conditions
       shell: bash
