@@ -38,9 +38,38 @@ jobs:
       id: gcc-check
       run: |
         if command -v gcc >/dev/null 2>&1; then
+          echo "GCC is already available"
           echo "gcc_available=true" >> $GITHUB_OUTPUT
         else
+          echo "GCC not found, will install it"
           echo "gcc_available=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Install GCC (if not available)
+      shell: bash
+      if: steps.gcc-check.outputs.gcc_available == 'false'
+      run: |
+        echo "Installing GCC via Chocolatey..."
+        # Install Chocolatey if not present
+        if ! command -v choco >/dev/null 2>&1; then
+          echo "Installing Chocolatey..."
+          powershell -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+          export PATH="$PATH:/c/ProgramData/chocolatey/bin"
+        fi
+        
+        # Install GCC via Chocolatey
+        choco install mingw -y
+        
+        # Add to PATH for this session
+        export PATH="$PATH:/c/tools/mingw64/bin"
+        echo "/c/tools/mingw64/bin" >> $GITHUB_PATH
+        
+        # Verify installation
+        if command -v gcc >/dev/null 2>&1; then
+          echo "✅ GCC installed successfully: $(gcc --version | head -1)"
+        else
+          echo "❌ GCC installation failed"
+          exit 1
         fi
         
     - name: Run basic tests first
@@ -50,34 +79,28 @@ jobs:
         go test -v ./...
         echo "✅ Basic tests passed"
         
-    - name: Run tests with coverage and race detection (if GCC available)
+    - name: Install covdata tool
       shell: bash
-      if: steps.gcc-check.outputs.gcc_available == 'true'
+      run: |
+        echo "Installing covdata tool..."
+        go install golang.org/x/tools/cmd/covdata@latest || echo "Failed to install covdata, continuing without it"
+        
+    - name: Run tests with coverage and race detection
+      shell: bash
       env:
         CGO_ENABLED: 1
       run: |
         echo "Running tests with race detection and coverage..."
-        go test -v -race -coverprofile=coverage.out -covermode=atomic ./... || true
-        echo "✅ Test execution with race detection completed"
-        
-    - name: Run tests with coverage (without race detection)
-      shell: bash
-      if: steps.gcc-check.outputs.gcc_available == 'false'
-      run: |
-        echo "Running tests with coverage (no race detection)..."
-        go test -v -coverprofile=coverage.out -covermode=atomic ./... || true
-        echo "⚠️ Test execution completed (coverage may have warnings due to covdata tool compatibility)"
-      continue-on-error: true
+        go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+        echo "✅ Test execution completed with race detection"
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
-      if: always()
       with:
         file: ./coverage.out
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
-      continue-on-error: true
         
     - name: Generate test report
       shell: bash
@@ -118,18 +141,11 @@ jobs:
         name: benchmark-results
         path: benchmark-results.txt
         
-    - name: Check for race conditions (if GCC available)
+    - name: Check for race conditions
       shell: bash
-      if: steps.gcc-check.outputs.gcc_available == 'true'
       env:
         CGO_ENABLED: 1
       run: |
         echo "Checking for race conditions..."
         go test -race ./...
         echo "✅ No race conditions detected"
-        
-    - name: Skip race condition check (GCC not available)
-      shell: bash
-      if: steps.gcc-check.outputs.gcc_available == 'false'
-      run: |
-        echo "⚠️ Skipping race condition check (GCC not available for CGO)"
