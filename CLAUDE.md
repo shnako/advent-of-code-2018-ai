@@ -65,12 +65,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Have I followed all Go best practices outlined in this document?
     - Did I complete the full CodeRabbit review cycle (actual review, not just summary)?
     - Did I merge the PR successfully?
-20. **COMPACT CONTEXT**: **MANDATORY** after completing each day - request user to use the `/compact` command to reduce context size
-    - **CRITICAL**: This must be done after merging each day's PR and before starting the next day
-    - Context compacting prevents memory overflow and maintains performance across all 25 days
-    - **DO NOT** proceed to the next day without compacting first
-    - **NOTE**: The AI cannot use `/compact` itself - must request the user to issue this command
-21. **Continue to next day**: Automatically proceed to the next day without stopping
+20. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
 - **Never stop during the entire process**: Continue solving until all 25 days are complete
@@ -81,8 +76,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
 - **Handle wrong answers**: If an answer is wrong, debug and try again
 - **Automated PR Review**: Wait and check for CodeRabbit comments automatically, don't stop for user input
 - **Complete all 25 days**: Don't stop until all puzzles are solved and all PRs are merged
-- **Context Management**: After completing each day, use `/compact` to minimize context before proceeding
-- **Quality Assurance**: All steps 1-21 MUST be completed - verify full compliance with this document before moving on
+- **Quality Assurance**: All steps 1-20 MUST be completed - verify full compliance with this document before moving on
 
 ### Handling Rate Limits:
 If the user's daily allowance is exceeded:
@@ -535,7 +529,7 @@ Based on Advent of Code 2018:
 - [ ] CodeRabbit review cycle completed successfully
 - [ ] All CodeRabbit comments addressed and resolved
 - [ ] Pull Request merged to main branch
-- [ ] All steps 1-21 from the workflow have been executed
+- [ ] All steps 1-20 from the workflow have been executed
 
 ## Completion Criteria
 The full 2018 challenge is considered complete when:
