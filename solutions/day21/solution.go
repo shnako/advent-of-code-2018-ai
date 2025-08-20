@@ -42,8 +42,8 @@ func (s *Solution) Part1() (int, error) {
 	ip := 0
 	
 	for ip >= 0 && ip < len(instructions) {
-		if ip == 30 {
-			// This is where the program checks if r3 == r0
+		if ip == 28 {
+			// This is where the program checks if r3 == r0 (instruction 29 in the input, but 28 in 0-indexed array)
 			// The first value r3 takes here is our answer for Part 1
 			return registers[3], nil
 		}
