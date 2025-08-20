@@ -18,7 +18,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 08  | [Day 08: Memory Maneuver](https://adventofcode.com/2018/day/8) | [solution.go](solutions/day08/solution.go) | [solution_test.go](solutions/day08/solution_test.go) | [input.txt](solutions/day08/input.txt) | [puzzle.txt](solutions/day08/puzzle.txt) |
 | 09  | [Day 09: Marble Mania](https://adventofcode.com/2018/day/9) | [solution.go](solutions/day09/solution.go) | [solution_test.go](solutions/day09/solution_test.go) | [input.txt](solutions/day09/input.txt) | [puzzle.txt](solutions/day09/puzzle.txt) |
 | 10  | [Day 10: The Stars Align](https://adventofcode.com/2018/day/10) | [solution.go](solutions/day10/solution.go) | [solution_test.go](solutions/day10/solution_test.go) | [input.txt](solutions/day10/input.txt) | [puzzle.txt](solutions/day10/puzzle.txt) |
-| 11  | [Day 11](https://adventofcode.com/2018/day/11) | - | - | - | - |
+| 11  | [Day 11: Chronal Charge](https://adventofcode.com/2018/day/11) | [solution.go](solutions/day11/solution.go) | [solution_test.go](solutions/day11/solution_test.go) | [input.txt](solutions/day11/input.txt) | [puzzle.txt](solutions/day11/puzzle.txt) |
 | 12  | [Day 12](https://adventofcode.com/2018/day/12) | - | - | - | - |
 | 13  | [Day 13](https://adventofcode.com/2018/day/13) | - | - | - | - |
 | 14  | [Day 14](https://adventofcode.com/2018/day/14) | - | - | - | - |

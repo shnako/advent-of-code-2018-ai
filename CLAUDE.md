@@ -37,9 +37,11 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - **SUMMARY ONLY**: If CodeRabbit only provides a walkthrough/summary without specific code feedback, WAIT for the actual review
       - **ACTUAL REVIEW**: Look for specific code review comments with suggestions, improvements, or issues
     - **RATE LIMIT HANDLING**: If CodeRabbit indicates rate limit exceeded:
-      - Wait for the specified time (usually 1-5 minutes)
-      - Post comment `@coderabbitai review` to trigger manual review
-      - Wait for CodeRabbit to respond and provide feedback
+      - **NEVER MERGE during rate limit** - this bypasses the review process entirely
+      - Wait for the FULL specified time (e.g., "6 minutes and 56 seconds" means wait at least 7 minutes)
+      - Post comment `@coderabbitai review` to trigger manual review ONLY after the wait time
+      - Continue waiting and checking until CodeRabbit provides actual review feedback
+      - **CRITICAL**: Rate limit does NOT excuse skipping the review - wait as long as needed
     - **ONLY PROCEED when CodeRabbit provides ACTUAL CODE REVIEW**:
       - Look for specific line-by-line comments with actionable feedback
       - Ignore initial summary/walkthrough - this is NOT the review
@@ -53,6 +55,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Repeat this automated cycle until CodeRabbit stops adding new substantive review comments
     - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
     - **DO NOT MERGE after just a summary** - wait for the complete review process
+    - **DO NOT MERGE during rate limits** - rate limits are temporary, reviews are essential
     - **DO NOT STOP**: This process should be fully automated without user intervention
 18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR using "Squash and merge"
 19. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
