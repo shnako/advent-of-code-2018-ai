@@ -60,8 +60,12 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
     - **DO NOT MERGE after just a summary** - wait for the complete review process
     - **DO NOT STOP**: This process should be fully automated without user intervention
-18. **Merge PR**: Once CodeRabbit review is complete and approved, merge the PR using "Squash and merge"
-19. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
+18. **Verify builds and tests**: Before merging, ensure all builds and tests pass
+    - Run `go build ./...` to verify the entire project builds successfully
+    - Run `go test ./...` to verify all tests pass across the project
+    - Fix any build errors or test failures before proceeding to merge
+19. **Merge PR**: Once CodeRabbit review is complete, builds pass, and tests pass, merge the PR using "Squash and merge"
+20. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
     - Did I implement and test both parts?
     - Did I submit both answers immediately?
@@ -71,7 +75,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Have I followed all Go best practices outlined in this document?
     - Did I complete the full CodeRabbit review cycle (actual review, not just summary)?
     - Did I merge the PR successfully?
-20. **Continue to next day**: Automatically proceed to the next day without stopping
+21. **Continue to next day**: Automatically proceed to the next day without stopping
 
 ### Important for Automation:
 - **Never stop during the entire process**: Continue solving until all 25 days are complete
