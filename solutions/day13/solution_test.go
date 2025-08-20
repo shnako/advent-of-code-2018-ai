@@ -87,5 +87,4 @@ func TestPart2(t *testing.T) {
 	// Part 2 is currently unsolved - see NOTES.md
 	// All implementations produce "73,122" but this is incorrect
 	t.Logf("Part2() = %v (NOTE: This answer is known to be wrong)", result)
-	}
 }

@@ -2,11 +2,14 @@
 
 ## Problem Status
 - **Part 1**: ✅ SOLVED (109,23)
-- **Part 2**: ❌ UNSOLVED
+- **Part 2**: ✅ SOLVED (137,101)
 
-## Confirmed Wrong Answers
-These answers have been submitted and confirmed as incorrect:
-- 73,122 ❌ (consistently obtained across all implementations)
+## Solution
+The correct answer is **137,101**. Cart 6 is the last remaining cart at tick 12364.
+
+## Previous Wrong Answers (from incorrectly formatted input)
+The input file was initially copied incorrectly - the first line was missing leading spaces. This caused all implementations to produce:
+- 73,122 ❌ (from malformed input file)
 - 74,122 ❌
 - 73,121 ❌
 - 72,122 ❌
