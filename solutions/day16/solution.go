@@ -74,6 +74,10 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 	if len(parts) < 2 {
 		// Try different separators in case of formatting issues
 		parts = strings.Split(normalizedInput, "\n\n\n\n")
+		if len(parts) < 2 {
+			// For single sample case (like test examples), treat entire input as samples section
+			parts = []string{normalizedInput, ""}
+		}
 	}
 	
 	sampleLines := strings.Split(strings.TrimSpace(parts[0]), "\n")

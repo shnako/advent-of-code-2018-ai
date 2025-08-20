@@ -51,9 +51,10 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - **NEVER MERGE while CodeRabbit shows "Currently processing new changes" or similar processing messages**
       - **WAIT until CodeRabbit fully completes its review** - processing messages indicate incomplete review
     - **CRITICAL: MANDATORY ADDRESS ALL FEEDBACK**: Once CodeRabbit's ACTUAL review comments are detected, you MUST address ALL comments by making necessary code changes
+      - **FIRST STEP - REPLY TO COMMENTS**: Before making any code changes, REPLY to each CodeRabbit review comment acknowledging it and explaining how you will address it
+      - **SECOND STEP - MAKE CODE CHANGES**: After replying to all comments, make the necessary code changes to fix all issues, suggestions, and improvements
       - **NEVER SKIP FEEDBACK**: Every single piece of actionable feedback must be addressed before merging
       - **NO EXCEPTIONS**: CodeRabbit feedback is not optional - it must all be implemented
-      - Make the required code changes to fix all issues, suggestions, and improvements
       - **DO NOT PROCEED TO BUILD/MERGE without addressing feedback first**
     - Push changes to the feature branch after addressing all feedback
     - **CRITICAL**: After EVERY push, CodeRabbit will automatically re-review and potentially add NEW comments
