@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows, X64]
     
     steps:
     - name: Checkout code
@@ -30,9 +30,13 @@ jobs:
           ${{ runner.os }}-go-
       
     - name: Download dependencies
+      shell: bash
       run: go mod download
       
     - name: Run tests with coverage
+      shell: bash
+      env:
+        CGO_ENABLED: 1
       run: |
         go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
         echo "Test execution completed"
@@ -46,6 +50,7 @@ jobs:
         fail_ci_if_error: false
         
     - name: Generate test report
+      shell: bash
       run: |
         go install github.com/jstemmer/go-junit-report/v2@latest
         go test -v ./... 2>&1 | go-junit-report -set-exit-code > test-report.xml
@@ -66,6 +71,7 @@ jobs:
       if: always()
       
     - name: Benchmark tests
+      shell: bash
       run: |
         echo "Running benchmark tests..."
         go test -bench=. -benchmem ./solutions/... | tee benchmark-results.txt
@@ -80,6 +86,9 @@ jobs:
         path: benchmark-results.txt
         
     - name: Check for race conditions
+      shell: bash
+      env:
+        CGO_ENABLED: 1
       run: |
         echo "Checking for race conditions..."
         go test -race ./...
