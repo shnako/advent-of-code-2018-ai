@@ -35,13 +35,22 @@ jobs:
         go-version: '1.21'
         cache: false
         
+    - name: Get Go paths
+      shell: pwsh
+      id: go-paths
+      run: |
+        $goPath = go env GOPATH
+        $goModCache = go env GOMODCACHE
+        Write-Host "GOPATH: $goPath"
+        Write-Host "GOMODCACHE: $goModCache"
+        "gomodcache=$goModCache" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        
     - name: Restore Go modules cache
       uses: actions/cache/restore@v4
       id: cache-restore
       continue-on-error: true
       with:
-        path: |
-          ~\go\pkg\mod
+        path: ${{ steps.go-paths.outputs.gomodcache }}
         key: ${{ runner.os }}-go-mod-${{ hashFiles('go.mod') }}
         restore-keys: |
           ${{ runner.os }}-go-mod-
@@ -205,8 +214,7 @@ jobs:
       if: always() && steps.cache-restore.outputs.cache-hit != 'true'
       continue-on-error: true
       with:
-        path: |
-          ~\go\pkg\mod
+        path: ${{ steps.go-paths.outputs.gomodcache }}
         key: ${{ runner.os }}-go-mod-${{ hashFiles('go.mod') }}
         
     - name: Workflow Summary
