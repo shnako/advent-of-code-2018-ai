@@ -103,9 +103,13 @@ func fetchContent(url, sessionCookie string, isHTML bool) (string, error) {
 
 		// Convert HTML to plain text (basic conversion)
 		content = stripHTML(content)
+		// Only trim whitespace for HTML content (puzzle descriptions)
+		return strings.TrimSpace(content), nil
 	}
 
-	return strings.TrimSpace(content), nil
+	// For input files, preserve exact formatting including leading/trailing whitespace
+	// This is critical for grid-based problems where whitespace is significant
+	return content, nil
 }
 
 func stripHTML(html string) string {
