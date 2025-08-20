@@ -13,6 +13,7 @@
 package day14
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -31,8 +32,13 @@ func (s *Solution) Part1() (string, error) {
 		return "", err
 	}
 	
-	// Start with recipes 3 and 7
-	recipes := []int{3, 7}
+	// Start with recipes 3 and 7; preallocate to target+10 to reduce reallocations
+	capacity := target + 12 // a small buffer above target+10
+	if capacity < 2 {
+		capacity = 2
+	}
+	recipes := make([]int, 0, capacity)
+	recipes = append(recipes, 3, 7)
 	elf1, elf2 := 0, 1
 	
 	// Continue until we have at least target + 10 recipes
@@ -42,7 +48,7 @@ func (s *Solution) Part1() (string, error) {
 		
 		// Add digits of sum to recipes
 		if sum >= 10 {
-			recipes = append(recipes, 1, sum%10)
+			recipes = append(recipes, sum/10, sum%10)
 		} else {
 			recipes = append(recipes, sum)
 		}
@@ -53,21 +59,27 @@ func (s *Solution) Part1() (string, error) {
 	}
 	
 	// Get the ten recipes after target recipes
-	result := ""
+	var b strings.Builder
+	b.Grow(10)
 	for i := target; i < target+10; i++ {
-		result += strconv.Itoa(recipes[i])
+		b.WriteByte(byte('0' + recipes[i]))
 	}
-	
-	return result, nil
+	return b.String(), nil
 }
 
 func (s *Solution) Part2() (int, error) {
 	targetStr := s.input
 	targetLen := len(targetStr)
+	if targetLen == 0 {
+		return 0, fmt.Errorf("empty input")
+	}
 	
 	// Convert target string to slice of ints for comparison
 	target := make([]int, targetLen)
 	for i, char := range targetStr {
+		if char < '0' || char > '9' {
+			return 0, fmt.Errorf("input contains non-digit at position %d: %q", i, char)
+		}
 		target[i] = int(char - '0')
 	}
 	
@@ -82,7 +94,7 @@ func (s *Solution) Part2() (int, error) {
 		
 		// Add digits of sum to recipes and check after each addition
 		if sum >= 10 {
-			recipes = append(recipes, 1)
+			recipes = append(recipes, sum/10)
 			// Check if we found the target sequence
 			if len(recipes) >= targetLen && s.matchesTarget(recipes, target, len(recipes)-targetLen) {
 				return len(recipes) - targetLen, nil
@@ -109,6 +121,9 @@ func (s *Solution) Part2() (int, error) {
 
 // Helper function to check if the target sequence matches at the given position
 func (s *Solution) matchesTarget(recipes []int, target []int, pos int) bool {
+	if pos < 0 || pos+len(target) > len(recipes) {
+		return false
+	}
 	for i := 0; i < len(target); i++ {
 		if recipes[pos+i] != target[i] {
 			return false
