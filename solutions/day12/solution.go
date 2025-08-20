@@ -5,7 +5,7 @@
  * Each pot's next state depends on its 5-pot neighborhood (2 left + self + 2 right).
  * Sum the pot numbers containing plants after 20 generations.
  * 
- * Part 2: TBD after Part 1 is solved and Part 2 is revealed.
+ * Part 2: Detect stabilization and extrapolate to 50,000,000,000 generations.
  */
 
 package day12
@@ -36,8 +36,12 @@ func New(input string) (*Solution, error) {
 
 	// Parse rules
 	rules := make(map[string]rune)
-	for i := 2; i < len(lines); i++ { // Skip empty line at index 1
-		parts := strings.Split(lines[i], " => ")
+	for i := 1; i < len(lines); i++ {
+		line := strings.TrimSpace(lines[i])
+		if line == "" {
+			continue
+		}
+		parts := strings.Split(line, " => ")
 		if len(parts) != 2 {
 			continue
 		}
@@ -115,17 +119,19 @@ func (s *Solution) getPotRange(pots map[int]bool) (int, int) {
 		return 0, 0
 	}
 	
-	minPot := 1000000
-	maxPot := -1000000
-	
-	for potNum, hasPlant := range pots {
-		if hasPlant {
-			if potNum < minPot {
-				minPot = potNum
-			}
-			if potNum > maxPot {
-				maxPot = potNum
-			}
+	first := true
+	minPot, maxPot := 0, 0
+	for potNum := range pots {
+		if first {
+			minPot, maxPot = potNum, potNum
+			first = false
+			continue
+		}
+		if potNum < minPot {
+			minPot = potNum
+		}
+		if potNum > maxPot {
+			maxPot = potNum
 		}
 	}
 	

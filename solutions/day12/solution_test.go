@@ -21,8 +21,15 @@ func readInput(t *testing.T) string {
 	return string(b)
 }
 
-func TestPart1Example(t *testing.T) {
-	input := `initial state: #..#.#..##......###...###
+func TestPart1(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{
+			name: "example",
+			input: `initial state: #..#.#..##......###...###
 
 ...## => #
 ..#.. => #
@@ -37,46 +44,36 @@ func TestPart1Example(t *testing.T) {
 ##.## => #
 ###.. => #
 ###.# => #
-####. => #`
-
-	solution, err := New(input)
-	if err != nil {
-		t.Fatalf("Failed to create solution: %v", err)
+####. => #`,
+			want: "325",
+		},
+		{
+			name:  "input",
+			input: readInput(t),
+			want:  "3217",
+		},
 	}
-
-	result, err := solution.Part1()
-	if err != nil {
-		t.Errorf("Part1() error = %v", err)
-		return
-	}
-
-	expected := "325"
-	if result != expected {
-		t.Errorf("Part1() = %v, want %v", result, expected)
-	}
-}
-
-func TestPart1(t *testing.T) {
-	solution, err := New(readInput(t))
-	if err != nil {
-		t.Fatalf("Failed to create solution: %v", err)
-	}
-	result, err := solution.Part1()
-
-	if err != nil {
-		t.Errorf("Part1() error = %v", err)
-		return
-	}
-
-	expected := "3217"
-	if result != expected {
-		t.Errorf("Part1() = %v, want %v", result, expected)
-	} else {
-		t.Logf("Part1() = %v", result)
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			solution, err := New(tt.input)
+			if err != nil {
+				t.Fatalf("Failed to create solution: %v", err)
+			}
+			got, err := solution.Part1()
+			if err != nil {
+				t.Fatalf("Part1() error = %v", err)
+			}
+			if got != tt.want {
+				t.Errorf("Part1() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
 
 func TestPart2(t *testing.T) {
+	t.Parallel()
 	solution, err := New(readInput(t))
 	if err != nil {
 		t.Fatalf("Failed to create solution: %v", err)
@@ -84,8 +81,7 @@ func TestPart2(t *testing.T) {
 	result, err := solution.Part2()
 
 	if err != nil {
-		t.Errorf("Part2() error = %v", err)
-		return
+		t.Fatalf("Part2() error = %v", err)
 	}
 
 	expected := "4000000000866"
@@ -97,6 +93,7 @@ func TestPart2(t *testing.T) {
 }
 
 func TestSimulateGenerations(t *testing.T) {
+	t.Parallel()
 	input := `initial state: #..#.#..##......###...###
 
 ...## => #
