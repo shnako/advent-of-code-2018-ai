@@ -57,11 +57,15 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - **DO NOT PROCEED TO BUILD/MERGE without addressing feedback first**
     - Push changes to the feature branch after addressing all feedback
     - **CRITICAL**: After EVERY push, CodeRabbit will automatically re-review and potentially add NEW comments
+    - **ABSOLUTE REQUIREMENT**: After EVERY SINGLE COMMIT you make to the PR, you MUST wait for CodeRabbit to provide NEW review comments and address ALL of them before proceeding
+    - **NEVER SKIP WAITING**: Even if you think your fix is minor, CodeRabbit WILL re-review and may have additional feedback
+    - **MANDATORY WAIT CYCLE**: After each commit: 1) Wait for CodeRabbit processing to complete, 2) Wait for actual review comments, 3) Address ALL feedback, 4) Only then proceed to next step
     - **ONLY REQUEST REVIEW AFTER RATE LIMITS**: Post `@coderabbitai review` ONLY when rate limits have been encountered - normal pushes trigger automatic review
     - **AFTER RATE LIMIT RECOVERY**: When rate limit expires, MUST post `@coderabbitai review` to actually get the review - waiting without requesting is pointless
     - Continue checking every minute for NEW CodeRabbit comments after each push
     - **USE POWERSHELL FOR WAITING**: Use `powershell -command "Start-Sleep -Seconds 60"` for non-interactive waits
     - **DO NOT assume review is complete** after addressing initial comments - wait for re-review
+    - **CRITICAL VIOLATION**: Attempting to merge while CodeRabbit has pending feedback or is still processing is a MAJOR WORKFLOW VIOLATION
     - Repeat this automated cycle until CodeRabbit stops adding new substantive review comments
     - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
     - **DO NOT MERGE after just a summary** - wait for the complete review process

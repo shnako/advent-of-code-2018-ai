@@ -13,7 +13,10 @@ After:  [3, 2, 2, 1]`
 	solution := New(input)
 	
 	// Parse the sample
-	samples, _ := solution.parseInput()
+	samples, _, err := solution.parseInput()
+	if err != nil {
+		t.Fatalf("Failed to parse input: %v", err)
+	}
 	if len(samples) != 1 {
 		t.Fatalf("Expected 1 sample, got %d", len(samples))
 	}

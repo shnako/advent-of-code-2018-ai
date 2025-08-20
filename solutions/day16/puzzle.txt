@@ -1,4 +1,7 @@
---- Day 16: Chronal Classification ---As you see the Elves defend their hot chocolate successfully, you go back to falling through time. This is going to become a problem.
+https://adventofcode.com/2018/day/16
+
+--- Day 16: Chronal Classification ---
+As you see the Elves defend their hot chocolate successfully, you go back to falling through time. This is going to become a problem.
 
 If you're ever going to return to your own time, you need to understand how this device on your wrist works. You have a little while before you reach your next destination, and with a bit of trial and error, you manage to pull up a programming manual on the device's tiny screen.
 
@@ -59,10 +62,9 @@ Equality testing:
 Unfortunately, while the manual gives the *name* of each opcode, it doesn't seem to indicate the *number*. However, you can monitor the CPU to see the contents of the registers before and after instructions are executed to try to work them out.  Each opcode has a number from `0` through `15`, but the manual doesn't say which is which. For example, suppose you capture the following sample:
 
 ```
-`Before: [3, 2, 1, 1]
+Before: [3, 2, 1, 1]
 9 2 1 2
 After:  [3, 2, 2, 1]
-`
 ```
 
 This sample shows the effect of the instruction `9 2 1 2` on the registers. Before the instruction is executed, register `0` has value `3`, register `1` has value `2`, and registers `2` and `3` have value `1`. After the instruction is executed, register `2`'s value becomes `2`.

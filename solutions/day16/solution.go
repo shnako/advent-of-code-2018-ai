@@ -31,7 +31,10 @@ func New(input string) *Solution {
 }
 
 func (s *Solution) Part1() (int, error) {
-	samples, _ := s.parseInput()
+	samples, _, err := s.parseInput()
+	if err != nil {
+		return 0, err
+	}
 	
 	count := 0
 	for _, sample := range samples {
@@ -45,7 +48,10 @@ func (s *Solution) Part1() (int, error) {
 }
 
 func (s *Solution) Part2() (int, error) {
-	samples, program := s.parseInput()
+	samples, program, err := s.parseInput()
+	if err != nil {
+		return 0, err
+	}
 	
 	// Determine which opcode number corresponds to which operation
 	opcodeMapping := s.deduceOpcodes(samples)
@@ -60,7 +66,7 @@ func (s *Solution) Part2() (int, error) {
 	return registers[0], nil
 }
 
-func (s *Solution) parseInput() ([]Sample, [][4]int) {
+func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 	// Normalize line endings first
 	normalizedInput := strings.ReplaceAll(s.input, "\r\n", "\n")
 	
@@ -125,7 +131,7 @@ func (s *Solution) parseInput() ([]Sample, [][4]int) {
 		}
 	}
 	
-	return samples, program
+	return samples, program, nil
 }
 
 func (s *Solution) countMatchingOpcodes(sample Sample) int {
