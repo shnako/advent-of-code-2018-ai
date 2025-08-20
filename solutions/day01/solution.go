@@ -1,10 +1,10 @@
 /*
  * Day 1: Chronal Calibration
- * 
+ *
  * Part 1: Calculate the final frequency after applying all frequency changes.
  * Starting from frequency 0, we parse each line as a signed integer and add it
  * to our running total.
- * 
+ *
  * Part 2: Find the first frequency reached twice when repeatedly cycling through
  * the frequency changes. This requires keeping track of all seen frequencies and
  * detecting when we encounter a duplicate.

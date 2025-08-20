@@ -1,10 +1,10 @@
 /*
  * Day 16: Chronal Classification
- * 
+ *
  * Part 1: Analyze instruction samples to determine how many behave like 3+ opcodes.
  * Each sample shows register state before/after an instruction execution.
  * Test each of 16 possible opcodes against the sample to see which ones match.
- * 
+ *
  * Part 2: Use the samples to deduce which opcode number corresponds to which operation,
  * then execute the test program using the decoded opcodes.
  */
@@ -35,7 +35,7 @@ func (s *Solution) Part1() (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	
+
 	count := 0
 	for _, sample := range samples {
 		matches := s.countMatchingOpcodes(sample)
@@ -43,7 +43,7 @@ func (s *Solution) Part1() (int, error) {
 			count++
 		}
 	}
-	
+
 	return count, nil
 }
 
@@ -52,24 +52,24 @@ func (s *Solution) Part2() (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	
+
 	// Determine which opcode number corresponds to which operation
 	opcodeMapping := s.deduceOpcodes(samples)
-	
+
 	// Execute the test program
 	registers := [4]int{0, 0, 0, 0}
 	for _, instruction := range program {
 		opcode := opcodeMapping[instruction[0]]
 		s.executeOpcode(opcode, instruction[1], instruction[2], instruction[3], &registers)
 	}
-	
+
 	return registers[0], nil
 }
 
 func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 	// Normalize line endings first
 	normalizedInput := strings.ReplaceAll(s.input, "\r\n", "\n")
-	
+
 	parts := strings.Split(normalizedInput, "\n\n\n")
 	if len(parts) < 2 {
 		// Try different separators in case of formatting issues
@@ -79,17 +79,17 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 			parts = []string{normalizedInput, ""}
 		}
 	}
-	
+
 	sampleLines := strings.Split(strings.TrimSpace(parts[0]), "\n")
 	var samples []Sample
-	
+
 	for i := 0; i < len(sampleLines); i += 4 {
 		if i+2 >= len(sampleLines) {
 			break
 		}
-		
+
 		sample := Sample{}
-		
+
 		// Parse Before line: "Before: [3, 1, 0, 1]"
 		beforeStr := strings.TrimPrefix(sampleLines[i], "Before: [")
 		beforeStr = strings.TrimSuffix(beforeStr, "]")
@@ -97,13 +97,13 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 		for j, part := range beforeParts {
 			sample.Before[j], _ = strconv.Atoi(strings.TrimSpace(part))
 		}
-		
+
 		// Parse instruction line: "9 3 3 2"
 		instParts := strings.Fields(sampleLines[i+1])
 		for j, part := range instParts {
 			sample.Instruction[j], _ = strconv.Atoi(part)
 		}
-		
+
 		// Parse After line: "After:  [3, 1, 0, 1]"
 		afterStr := strings.TrimPrefix(sampleLines[i+2], "After:  [")
 		afterStr = strings.TrimSuffix(afterStr, "]")
@@ -111,10 +111,10 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 		for j, part := range afterParts {
 			sample.After[j], _ = strconv.Atoi(strings.TrimSpace(part))
 		}
-		
+
 		samples = append(samples, sample)
 	}
-	
+
 	// Parse program (second part)
 	var program [][4]int
 	if len(parts) >= 2 {
@@ -134,7 +134,7 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 			}
 		}
 	}
-	
+
 	return samples, program, nil
 }
 
@@ -145,7 +145,7 @@ func (s *Solution) countMatchingOpcodes(sample Sample) int {
 		"setr", "seti", "gtir", "gtri",
 		"gtrr", "eqir", "eqri", "eqrr",
 	}
-	
+
 	count := 0
 	for _, opcode := range opcodes {
 		registers := sample.Before
@@ -154,7 +154,7 @@ func (s *Solution) countMatchingOpcodes(sample Sample) int {
 			count++
 		}
 	}
-	
+
 	return count
 }
 
@@ -165,7 +165,7 @@ func (s *Solution) deduceOpcodes(samples []Sample) map[int]string {
 		"setr", "seti", "gtir", "gtri",
 		"gtrr", "eqir", "eqri", "eqrr",
 	}
-	
+
 	// For each opcode number, track which operations are still possible
 	possible := make(map[int]map[string]bool)
 	for i := 0; i < 16; i++ {
@@ -174,7 +174,7 @@ func (s *Solution) deduceOpcodes(samples []Sample) map[int]string {
 			possible[i][op] = true
 		}
 	}
-	
+
 	// Eliminate impossible combinations based on samples
 	for _, sample := range samples {
 		opcodeNum := sample.Instruction[0]
@@ -186,45 +186,45 @@ func (s *Solution) deduceOpcodes(samples []Sample) map[int]string {
 			}
 		}
 	}
-	
+
 	// Use process of elimination to find unique mappings
 	mapping := make(map[int]string)
 	used := make(map[string]bool)
-	
+
 	// Safety counter to prevent infinite loops
 	maxIterations := 100
 	iterations := 0
-	
+
 	for len(mapping) < 16 && iterations < maxIterations {
 		iterations++
 		progress := false
-		
+
 		// Find opcode numbers with only one possible operation
 		for opcodeNum := 0; opcodeNum < 16; opcodeNum++ {
 			if _, found := mapping[opcodeNum]; found {
 				continue
 			}
-			
+
 			var candidates []string
 			for op, stillPossible := range possible[opcodeNum] {
 				if stillPossible && !used[op] {
 					candidates = append(candidates, op)
 				}
 			}
-			
+
 			if len(candidates) == 1 {
 				mapping[opcodeNum] = candidates[0]
 				used[candidates[0]] = true
 				progress = true
 			}
 		}
-		
+
 		// If no progress was made, we might be stuck
 		if !progress {
 			break
 		}
 	}
-	
+
 	return mapping
 }
 

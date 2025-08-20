@@ -32,7 +32,8 @@
       "Bash(gh pr comment:*)",
       "Bash(powershell:*)",
       "Bash(git stash:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Bash(gh pr checks:*)"
     ],
     "deny": [],
     "ask": []

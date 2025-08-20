@@ -26,17 +26,17 @@ func TestPart1Examples(t *testing.T) {
 		{"21 players, 6111 marbles", "21 players; last marble is worth 6111 points", 54718},
 		{"30 players, 5807 marbles", "30 players; last marble is worth 5807 points", 37305},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			solution := New(tt.input)
 			result, err := solution.Part1()
-			
+
 			if err != nil {
 				t.Errorf("Part1() error = %v", err)
 				return
 			}
-			
+
 			if result != tt.expected {
 				t.Errorf("Part1() = %v, want %v", result, tt.expected)
 			}
@@ -47,12 +47,12 @@ func TestPart1Examples(t *testing.T) {
 func TestPart1(t *testing.T) {
 	solution := New(readInput(t))
 	result, err := solution.Part1()
-	
+
 	if err != nil {
 		t.Errorf("Part1() error = %v", err)
 		return
 	}
-	
+
 	expected := 418237
 	if result != expected {
 		t.Errorf("Part1() = %v, want %v", result, expected)
@@ -64,12 +64,12 @@ func TestPart1(t *testing.T) {
 func TestPart2(t *testing.T) {
 	solution := New(readInput(t))
 	result, err := solution.Part2()
-	
+
 	if err != nil {
 		t.Errorf("Part2() error = %v", err)
 		return
 	}
-	
+
 	expected := 3505711612
 	if result != expected {
 		t.Errorf("Part2() = %v, want %v", result, expected)
