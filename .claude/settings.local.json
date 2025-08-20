@@ -33,10 +33,14 @@
       "Bash(powershell:*)",
       "Bash(git stash:*)",
       "Bash(gh run view:*)",
+      "WebFetch(domain:github.com)",
       "Bash(gh run list:*)",
-      "Bash(gh pr checks:*)",
-      "Bash(gofmt:*)",
-      "WebFetch(domain:github.com)"
+      "Bash(gh pr list:*)",
+      "Bash(cp:*)",
+      "WebFetch(domain:www.reddit.com)",
+      "WebSearch",
+      "WebFetch(domain:todd.ginsberg.com)",
+      "WebFetch(domain:www.michaelfogleman.com)"
     ],
     "deny": [],
     "ask": []
