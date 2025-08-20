@@ -32,7 +32,7 @@ func TestGetPowerLevel(t *testing.T) {
 		{217, 196, 39, 0},
 		{101, 153, 71, 4},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(fmt.Sprintf("x=%d,y=%d,serial=%d", tt.x, tt.y, tt.serial), func(t *testing.T) {
 			solution := &Solution{serialNumber: tt.serial}
@@ -53,19 +53,19 @@ func TestPart1Examples(t *testing.T) {
 		{18, "33,45"},
 		{42, "21,61"},
 	}
-	
+
 	for _, tt := range tests {
 		solution, err := New(strconv.Itoa(tt.serial))
 		if err != nil {
 			t.Fatalf("Failed to create solution: %v", err)
 		}
-		
+
 		result, err := solution.Part1()
 		if err != nil {
 			t.Errorf("Part1() error = %v", err)
 			continue
 		}
-		
+
 		if result != tt.expected {
 			t.Errorf("Part1() with serial %d = %s, want %s", tt.serial, result, tt.expected)
 		}
@@ -80,19 +80,19 @@ func TestPart2Examples(t *testing.T) {
 		{18, "90,269,16"},
 		{42, "232,251,12"},
 	}
-	
+
 	for _, tt := range tests {
 		solution, err := New(strconv.Itoa(tt.serial))
 		if err != nil {
 			t.Fatalf("Failed to create solution: %v", err)
 		}
-		
+
 		result, err := solution.Part2()
 		if err != nil {
 			t.Errorf("Part2() error = %v", err)
 			continue
 		}
-		
+
 		if result != tt.expected {
 			t.Errorf("Part2() with serial %d = %s, want %s", tt.serial, result, tt.expected)
 		}
@@ -105,12 +105,12 @@ func TestPart1(t *testing.T) {
 		t.Fatalf("Failed to create solution: %v", err)
 	}
 	result, err := solution.Part1()
-	
+
 	if err != nil {
 		t.Errorf("Part1() error = %v", err)
 		return
 	}
-	
+
 	expected := "243,68"
 	if result != expected {
 		t.Errorf("Part1() = %v, want %v", result, expected)
@@ -125,12 +125,12 @@ func TestPart2(t *testing.T) {
 		t.Fatalf("Failed to create solution: %v", err)
 	}
 	result, err := solution.Part2()
-	
+
 	if err != nil {
 		t.Errorf("Part2() error = %v", err)
 		return
 	}
-	
+
 	expected := "236,252,12"
 	if result != expected {
 		t.Errorf("Part2() = %v, want %v", result, expected)

@@ -1,10 +1,10 @@
 /*
  * Day 12: Subterranean Sustainability
- * 
+ *
  * Part 1: Simulate cellular automata for plants in pots for 20 generations.
  * Each pot's next state depends on its 5-pot neighborhood (2 left + self + 2 right).
  * Sum the pot numbers containing plants after 20 generations.
- * 
+ *
  * Part 2: Detect stabilization and extrapolate to 50,000,000,000 generations.
  */
 
@@ -71,7 +71,7 @@ func (s *Solution) Part2() (string, error) {
 func (s *Solution) simulate(generations int) int {
 	// Use map to represent pots, where key is pot number and value is whether it has a plant
 	pots := make(map[int]bool)
-	
+
 	// Initialize pots from initial state (pot 0 is at position 0)
 	for i, char := range s.initialState {
 		if char == '#' {
@@ -91,18 +91,18 @@ func (s *Solution) simulate(generations int) int {
 			sum += potNum
 		}
 	}
-	
+
 	return sum
 }
 
 func (s *Solution) nextGeneration(currentPots map[int]bool) map[int]bool {
 	nextPots := make(map[int]bool)
-	
+
 	// Find the range of pots to check (expand by 2 on each side)
 	minPot, maxPot := s.getPotRange(currentPots)
 	minPot -= 2
 	maxPot += 2
-	
+
 	// Check each pot in the expanded range
 	for pot := minPot; pot <= maxPot; pot++ {
 		pattern := s.getPattern(currentPots, pot)
@@ -110,7 +110,7 @@ func (s *Solution) nextGeneration(currentPots map[int]bool) map[int]bool {
 			nextPots[pot] = true
 		}
 	}
-	
+
 	return nextPots
 }
 
@@ -118,7 +118,7 @@ func (s *Solution) getPotRange(pots map[int]bool) (int, int) {
 	if len(pots) == 0 {
 		return 0, 0
 	}
-	
+
 	first := true
 	minPot, maxPot := 0, 0
 	for potNum := range pots {
@@ -134,13 +134,13 @@ func (s *Solution) getPotRange(pots map[int]bool) (int, int) {
 			maxPot = potNum
 		}
 	}
-	
+
 	return minPot, maxPot
 }
 
 func (s *Solution) getPattern(pots map[int]bool, centerPot int) string {
 	var pattern strings.Builder
-	
+
 	for offset := -2; offset <= 2; offset++ {
 		pot := centerPot + offset
 		if pots[pot] {
@@ -149,14 +149,14 @@ func (s *Solution) getPattern(pots map[int]bool, centerPot int) string {
 			pattern.WriteRune('.')
 		}
 	}
-	
+
 	return pattern.String()
 }
 
 func (s *Solution) simulateUntilStable(targetGenerations int) int {
 	// Use map to represent pots
 	pots := make(map[int]bool)
-	
+
 	// Initialize pots from initial state
 	for i, char := range s.initialState {
 		if char == '#' {
@@ -168,30 +168,30 @@ func (s *Solution) simulateUntilStable(targetGenerations int) int {
 	prevSum := s.calculateSum(pots)
 	prevDiff := 0
 	stableDiffCount := 0
-	
+
 	for gen := 1; gen <= targetGenerations; gen++ {
 		pots = s.nextGeneration(pots)
 		currentSum := s.calculateSum(pots)
-		
+
 		diff := currentSum - prevSum
-		
+
 		// Check if the difference has stabilized
 		if diff == prevDiff {
 			stableDiffCount++
 		} else {
 			stableDiffCount = 0
 		}
-		
+
 		// If stable for several generations, we can extrapolate
 		if stableDiffCount >= 10 {
 			remainingGens := targetGenerations - gen
 			return currentSum + (diff * remainingGens)
 		}
-		
+
 		prevSum = currentSum
 		prevDiff = diff
 	}
-	
+
 	return prevSum
 }
 

@@ -1,9 +1,9 @@
 /*
  * Day 2: Inventory Management System
- * 
+ *
  * Part 1: Calculate checksum by counting box IDs that have exactly two of any letter
  * and separately counting those with exactly three of any letter, then multiply.
- * 
+ *
  * Part 2: Find the two correct box IDs that differ by exactly one character at the
  * same position, then return the common letters between them.
  */
@@ -30,7 +30,7 @@ func (s *Solution) Part1() (int, error) {
 	threes := 0
 
 	for _, line := range lines {
-		
+
 		var counts [26]int
 		for i := 0; i < len(line); i++ {
 			c := line[i]
@@ -53,7 +53,7 @@ func (s *Solution) Part1() (int, error) {
 				break
 			}
 		}
-		
+
 		if hasTwo {
 			twos++
 		}
@@ -61,13 +61,13 @@ func (s *Solution) Part1() (int, error) {
 			threes++
 		}
 	}
-	
+
 	return twos * threes, nil
 }
 
 func (s *Solution) Part2() (string, error) {
 	lines := s.parseLines()
-	
+
 	for i := 0; i < len(lines); i++ {
 		for j := i + 1; j < len(lines); j++ {
 			if diffByOne(lines[i], lines[j]) {
@@ -75,21 +75,21 @@ func (s *Solution) Part2() (string, error) {
 			}
 		}
 	}
-	
+
 	return "", errors.New("no pair of IDs differing by exactly one character was found")
 }
 
 func (s *Solution) parseLines() []string {
 	lines := strings.Split(s.input, "\n")
 	result := make([]string, 0, len(lines))
-	
+
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
 		if line != "" {
 			result = append(result, line)
 		}
 	}
-	
+
 	return result
 }
 
@@ -97,7 +97,7 @@ func diffByOne(a, b string) bool {
 	if len(a) != len(b) {
 		return false
 	}
-	
+
 	differences := 0
 	for i := 0; i < len(a); i++ {
 		if a[i] != b[i] {
@@ -107,19 +107,19 @@ func diffByOne(a, b string) bool {
 			}
 		}
 	}
-	
+
 	return differences == 1
 }
 
 func commonLetters(a, b string) string {
 	var result strings.Builder
 	result.Grow(len(a))
-	
+
 	for i := 0; i < len(a) && i < len(b); i++ {
 		if a[i] == b[i] {
 			result.WriteByte(a[i])
 		}
 	}
-	
+
 	return result.String()
 }

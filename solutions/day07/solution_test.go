@@ -22,15 +22,15 @@ Step A must be finished before step D can begin.
 Step B must be finished before step E can begin.
 Step D must be finished before step E can begin.
 Step F must be finished before step E can begin.`
-	
+
 	solution := New(input)
 	result, err := solution.Part1()
-	
+
 	if err != nil {
 		t.Errorf("Part1() error = %v", err)
 		return
 	}
-	
+
 	expected := "CABDFE"
 	if result != expected {
 		t.Errorf("Part1() = %v, want %v", result, expected)
@@ -40,12 +40,12 @@ Step F must be finished before step E can begin.`
 func TestPart1(t *testing.T) {
 	solution := New(readInput(t))
 	result, err := solution.Part1()
-	
+
 	if err != nil {
 		t.Errorf("Part1() error = %v", err)
 		return
 	}
-	
+
 	expected := "JRHSBCKUTVWDQAIGYOPXMFNZEL"
 	if result != expected {
 		t.Errorf("Part1() = %v, want %v", result, expected)
@@ -62,9 +62,9 @@ Step A must be finished before step D can begin.
 Step B must be finished before step E can begin.
 Step D must be finished before step E can begin.
 Step F must be finished before step E can begin.`
-	
+
 	solution := New(input)
-	
+
 	// Test with example parameters: 2 workers, 0 base time (so A=1, F=6, etc.)
 	result := solution.simulateWithWorkers(2, 0)
 	expected := 15
@@ -76,12 +76,12 @@ Step F must be finished before step E can begin.`
 func TestPart2(t *testing.T) {
 	solution := New(readInput(t))
 	result, err := solution.Part2()
-	
+
 	if err != nil {
 		t.Errorf("Part2() error = %v", err)
 		return
 	}
-	
+
 	expected := 975
 	if result != expected {
 		t.Errorf("Part2() = %v, want %v", result, expected)

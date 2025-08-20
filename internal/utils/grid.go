@@ -17,13 +17,13 @@ func NewGrid(input string) *Grid {
 	if height == 0 {
 		return &Grid{Width: 0, Height: 0, Data: [][]rune{}}
 	}
-	
+
 	width := len(lines[0])
 	data := make([][]rune, height)
 	for i, line := range lines {
 		data[i] = []rune(line)
 	}
-	
+
 	return &Grid{
 		Width:  width,
 		Height: height,
@@ -112,7 +112,7 @@ var (
 	NorthWest = Point{-1, -1}
 	SouthEast = Point{1, 1}
 	SouthWest = Point{-1, 1}
-	
+
 	Cardinals = []Point{North, South, East, West}
 	AllDirs   = []Point{North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest}
 )
