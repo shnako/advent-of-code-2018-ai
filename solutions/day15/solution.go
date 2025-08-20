@@ -13,6 +13,7 @@
 package day15
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -92,9 +93,64 @@ func (s *Solution) Part1() (int, error) {
 }
 
 func (s *Solution) Part2() (int, error) {
-	// Binary search for minimum elf attack power where no elf dies
-	low, high := 4, 100
+	// Find upper bound using exponential search
+	low := 4
+	high := 4
+	for {
+		game := s.parseInput()
+		initialElves := game.countInitialElves()
+		
+		// Set elf attack power to test
+		for _, unit := range game.Units {
+			if unit.Type == 'E' {
+				unit.AttackPower = high
+			}
+		}
+		
+		// Run combat simulation
+		rounds := 0
+		for {
+			elves, goblins := game.countLiving()
+			if elves == 0 || goblins == 0 {
+				break
+			}
+			
+			units := game.getLivingUnitsInOrder()
+			
+			roundCompleted := true
+			for _, unit := range units {
+				if !unit.Alive {
+					continue
+				}
+				
+				elves, goblins := game.countLiving()
+				if elves == 0 || goblins == 0 {
+					roundCompleted = false
+					break
+				}
+				
+				game.takeTurn(unit)
+			}
+			
+			if roundCompleted {
+				rounds++
+			}
+		}
+		
+		// Check if all elves survived
+		finalElves, _ := game.countLiving()
+		if finalElves == initialElves {
+			// All elves survived, we found a valid upper bound
+			break
+		}
+		
+		high *= 2
+		if high > 1000 { // Safety cap
+			return 0, fmt.Errorf("attack power exceeded reasonable bounds")
+		}
+	}
 	
+	// Binary search for minimum elf attack power where no elf dies
 	for low < high {
 		mid := (low + high) / 2
 		
@@ -203,7 +259,8 @@ func (s *Solution) parseInput() *Game {
 	grid := make([][]rune, height)
 	var units []*Unit
 	
-	for y, line := range lines {
+	for y, raw := range lines {
+		line := strings.TrimRight(raw, "\r")
 		grid[y] = []rune(line)
 		for x, char := range line {
 			if char == 'E' || char == 'G' {
@@ -362,8 +419,7 @@ func (g *Game) moveUnit(unit *Unit, targets []*Unit) {
 	target := nearest[0].pos
 	
 	// Find first step toward target
-	nextStep := g.findFirstStep(unit.Pos, target)
-	if nextStep != (Point{}) {
+	if nextStep, ok := g.findFirstStep(unit.Pos, target); ok {
 		unit.Pos = nextStep
 	}
 }
@@ -441,9 +497,9 @@ func (g *Game) shortestPath(start, end Point) int {
 	return -1 // Not reachable
 }
 
-func (g *Game) findFirstStep(start, end Point) Point {
+func (g *Game) findFirstStep(start, end Point) (Point, bool) {
 	if start == end {
-		return Point{}
+		return Point{}, false
 	}
 	
 	queue := []Point{start}
@@ -478,12 +534,12 @@ func (g *Game) findFirstStep(start, end Point) Point {
 					curr = parent[curr]
 					path = append(path, curr)
 				}
-				return curr
+				return curr, true
 			}
 		}
 	}
 	
-	return Point{} // Not reachable
+	return Point{}, false // Not reachable
 }
 
 func (g *Game) attack(unit *Unit, enemies []*Unit) {
