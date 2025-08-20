@@ -25,7 +25,7 @@ jobs:
         path: |
           ~/go/pkg/mod
           ~/.cache/go-build
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        key: ${{ runner.os }}-go-${{ hashFiles('go.mod') }}
         restore-keys: |
           ${{ runner.os }}-go-
       
@@ -33,13 +33,31 @@ jobs:
       shell: bash
       run: go mod download
       
-    - name: Run tests with coverage
+    - name: Check if GCC is available
       shell: bash
+      id: gcc-check
+      run: |
+        if command -v gcc >/dev/null 2>&1; then
+          echo "gcc_available=true" >> $GITHUB_OUTPUT
+        else
+          echo "gcc_available=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Run tests with coverage and race detection (if GCC available)
+      shell: bash
+      if: steps.gcc-check.outputs.gcc_available == 'true'
       env:
         CGO_ENABLED: 1
       run: |
         go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
-        echo "Test execution completed"
+        echo "Test execution completed with race detection"
+        
+    - name: Run tests with coverage (without race detection)
+      shell: bash
+      if: steps.gcc-check.outputs.gcc_available == 'false'
+      run: |
+        go test -v -coverprofile=coverage.out -covermode=atomic ./...
+        echo "Test execution completed without race detection (GCC not available)"
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
@@ -74,7 +92,10 @@ jobs:
       shell: bash
       run: |
         echo "Running benchmark tests..."
-        go test -bench=. -benchmem ./solutions/... | tee benchmark-results.txt
+        go test -bench=. -benchmem ./solutions/... | tee benchmark-results.txt || echo "No benchmarks found"
+        if [ ! -f benchmark-results.txt ]; then
+          echo "No benchmark results generated" > benchmark-results.txt
+        fi
         echo "Benchmark tests completed"
       continue-on-error: true
       
@@ -85,11 +106,18 @@ jobs:
         name: benchmark-results
         path: benchmark-results.txt
         
-    - name: Check for race conditions
+    - name: Check for race conditions (if GCC available)
       shell: bash
+      if: steps.gcc-check.outputs.gcc_available == 'true'
       env:
         CGO_ENABLED: 1
       run: |
         echo "Checking for race conditions..."
         go test -race ./...
         echo "✅ No race conditions detected"
+        
+    - name: Skip race condition check (GCC not available)
+      shell: bash
+      if: steps.gcc-check.outputs.gcc_available == 'false'
+      run: |
+        echo "⚠️ Skipping race condition check (GCC not available for CGO)"
