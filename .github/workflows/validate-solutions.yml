@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows, X64]
     
     steps:
     - name: Checkout code
@@ -20,6 +20,7 @@ jobs:
         go-version: '1.21'
         
     - name: Validate puzzle.txt formatting and completion
+      shell: bash
       run: |
         echo "Checking puzzle.txt file formatting and completion status..."
         failed=0
@@ -72,6 +73,7 @@ jobs:
         fi
         
     - name: Validate solution files exist
+      shell: bash
       run: |
         echo "Checking that all required solution files exist..."
         failed=0
@@ -124,6 +126,7 @@ jobs:
         fi
         
     - name: Check Go formatting
+      shell: bash
       run: |
         echo "Checking Go code formatting..."
         unformatted=$(gofmt -l solutions/)
