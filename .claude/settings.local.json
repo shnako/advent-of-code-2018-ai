@@ -32,7 +32,9 @@
       "Bash(gh pr comment:*)",
       "Bash(powershell:*)",
       "Bash(git stash:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh run list:*)"
     ],
     "deny": [],
     "ask": []
