@@ -14,7 +14,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 04  | [Day 04: Repose Record](https://adventofcode.com/2018/day/4) | [solution.go](solutions/day04/solution.go) | [solution_test.go](solutions/day04/solution_test.go) | [input.txt](solutions/day04/input.txt) | [puzzle.txt](solutions/day04/puzzle.txt) |
 | 05  | [Day 05: Alchemical Reduction](https://adventofcode.com/2018/day/5) | [solution.go](solutions/day05/solution.go) | [solution_test.go](solutions/day05/solution_test.go) | [input.txt](solutions/day05/input.txt) | [puzzle.txt](solutions/day05/puzzle.txt) |
 | 06  | [Day 06: Chronal Coordinates](https://adventofcode.com/2018/day/6) | [solution.go](solutions/day06/solution.go) | [solution_test.go](solutions/day06/solution_test.go) | [input.txt](solutions/day06/input.txt) | [puzzle.txt](solutions/day06/puzzle.txt) |
-| 07  | [Day 07](https://adventofcode.com/2018/day/7) | - | - | - | - |
+| 07  | [Day 07: The Sum of Its Parts](https://adventofcode.com/2018/day/7) | [solution.go](solutions/day07/solution.go) | [solution_test.go](solutions/day07/solution_test.go) | [input.txt](solutions/day07/input.txt) | [puzzle.txt](solutions/day07/puzzle.txt) |
 | 08  | [Day 08](https://adventofcode.com/2018/day/8) | - | - | - | - |
 | 09  | [Day 09](https://adventofcode.com/2018/day/9) | - | - | - | - |
 | 10  | [Day 10](https://adventofcode.com/2018/day/10) | - | - | - | - |
