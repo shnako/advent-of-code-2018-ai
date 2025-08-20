@@ -89,6 +89,10 @@ func (s *Solution) simulateMinute() {
 	
 	for y := 0; y < s.height; y++ {
 		for x := 0; x < s.width; x++ {
+			// Additional bounds check for debugging
+			if y >= len(s.grid) || x >= len(s.grid[0]) {
+				continue
+			}
 			newGrid[y][x] = s.getNextState(x, y)
 		}
 	}
@@ -97,6 +101,11 @@ func (s *Solution) simulateMinute() {
 }
 
 func (s *Solution) getNextState(x, y int) rune {
+	// Bounds checking to prevent panic
+	if y >= len(s.grid) || x >= len(s.grid[y]) {
+		// Return default state if out of bounds
+		return '.'
+	}
 	current := s.grid[y][x]
 	trees, lumberyards, _ := s.countAdjacent(x, y)
 	
