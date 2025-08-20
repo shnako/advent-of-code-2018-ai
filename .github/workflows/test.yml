@@ -151,14 +151,12 @@ jobs:
         # Ensure we always have a test report file
         if [ ! -f test-report.xml ] || [ ! -s test-report.xml ]; then
           echo "Creating fallback test report..."
-          cat > test-report.xml << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">
-    <testcase name="workflow-executed" classname="github-actions" time="0"/>
-  </testsuite>
-</testsuites>
-EOF
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > test-report.xml
+          echo '<testsuites>' >> test-report.xml
+          echo '  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">' >> test-report.xml
+          echo '    <testcase name="workflow-executed" classname="github-actions" time="0"/>' >> test-report.xml
+          echo '  </testsuite>' >> test-report.xml
+          echo '</testsuites>' >> test-report.xml
         fi
         
         echo "Test report file created:"
