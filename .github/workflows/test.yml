@@ -35,25 +35,6 @@ jobs:
         go-version: '1.21'
         cache: false
         
-    - name: Get Go paths
-      shell: pwsh
-      id: go-paths
-      run: |
-        $goPath = go env GOPATH
-        $goModCache = go env GOMODCACHE
-        Write-Host "GOPATH: $goPath"
-        Write-Host "GOMODCACHE: $goModCache"
-        "gomodcache=$goModCache" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-        
-    - name: Restore Go modules cache
-      uses: actions/cache/restore@v4
-      id: cache-restore
-      continue-on-error: true
-      with:
-        path: ${{ steps.go-paths.outputs.gomodcache }}
-        key: ${{ runner.os }}-go-mod-${{ hashFiles('go.mod') }}
-        restore-keys: |
-          ${{ runner.os }}-go-mod-
       
     - name: Download dependencies
       shell: pwsh
@@ -209,14 +190,6 @@ jobs:
         name: benchmark-results
         path: ${{ github.workspace }}/benchmark-results.txt
         
-    - name: Save Go modules cache
-      uses: actions/cache/save@v4
-      if: always() && steps.cache-restore.outputs.cache-hit != 'true'
-      continue-on-error: true
-      with:
-        path: ${{ steps.go-paths.outputs.gomodcache }}
-        key: ${{ runner.os }}-go-mod-${{ hashFiles('go.mod') }}
-        
     - name: Workflow Summary
       shell: pwsh
       if: always()
@@ -224,7 +197,6 @@ jobs:
         Write-Host "🎯 Workflow Summary"
         Write-Host "=================="
         Write-Host "✅ Go setup: $(if ((go version 2>$null)) { 'Success' } else { 'Failed' })"
-        Write-Host "✅ Cache: $(if ('${{ steps.cache-restore.outputs.cache-hit }}' -eq 'true') { 'Hit' } else { 'Miss' })"
         Write-Host "✅ Tests: Basic tests executed"
         Write-Host "✅ Race Detection: $('${{ steps.gcc-setup.outputs.gcc_available }}' -eq 'true' ? 'Enabled' : 'Disabled (no GCC)')"
         Write-Host "✅ Test Report: $(if (Test-Path '$env:GITHUB_WORKSPACE\test-report.xml') { 'Created' } else { 'Not created' })"
