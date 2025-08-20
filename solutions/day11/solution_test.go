@@ -1,15 +1,24 @@
 package day11
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
+	"runtime"
+	"strconv"
 	"testing"
 )
 
 func readInput(t *testing.T) string {
 	t.Helper()
-	b, err := os.ReadFile("input.txt")
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatalf("runtime.Caller failed")
+	}
+	path := filepath.Join(filepath.Dir(filename), "input.txt")
+	b, err := os.ReadFile(path)
 	if err != nil {
-		t.Fatalf("Failed to read input: %v", err)
+		t.Fatalf("Failed to read input at %s: %v", path, err)
 	}
 	return string(b)
 }
@@ -25,12 +34,14 @@ func TestGetPowerLevel(t *testing.T) {
 	}
 	
 	for _, tt := range tests {
-		solution := &Solution{serialNumber: tt.serial}
-		result := solution.getPowerLevel(tt.x, tt.y)
-		if result != tt.expected {
-			t.Errorf("getPowerLevel(%d,%d) with serial %d = %d, want %d", 
-				tt.x, tt.y, tt.serial, result, tt.expected)
-		}
+		t.Run(fmt.Sprintf("x=%d,y=%d,serial=%d", tt.x, tt.y, tt.serial), func(t *testing.T) {
+			solution := &Solution{serialNumber: tt.serial}
+			result := solution.getPowerLevel(tt.x, tt.y)
+			if result != tt.expected {
+				t.Fatalf("getPowerLevel(%d,%d) with serial %d = %d, want %d",
+					tt.x, tt.y, tt.serial, result, tt.expected)
+			}
+		})
 	}
 }
 
@@ -44,9 +55,10 @@ func TestPart1Examples(t *testing.T) {
 	}
 	
 	for _, tt := range tests {
-		solution := &Solution{serialNumber: tt.serial}
-		solution.calculateGrid()
-		solution.buildSummedAreaTable()
+		solution, err := New(strconv.Itoa(tt.serial))
+		if err != nil {
+			t.Fatalf("Failed to create solution: %v", err)
+		}
 		
 		result, err := solution.Part1()
 		if err != nil {
@@ -70,9 +82,10 @@ func TestPart2Examples(t *testing.T) {
 	}
 	
 	for _, tt := range tests {
-		solution := &Solution{serialNumber: tt.serial}
-		solution.calculateGrid()
-		solution.buildSummedAreaTable()
+		solution, err := New(strconv.Itoa(tt.serial))
+		if err != nil {
+			t.Fatalf("Failed to create solution: %v", err)
+		}
 		
 		result, err := solution.Part2()
 		if err != nil {
@@ -87,7 +100,10 @@ func TestPart2Examples(t *testing.T) {
 }
 
 func TestPart1(t *testing.T) {
-	solution := New(readInput(t))
+	solution, err := New(readInput(t))
+	if err != nil {
+		t.Fatalf("Failed to create solution: %v", err)
+	}
 	result, err := solution.Part1()
 	
 	if err != nil {
@@ -104,7 +120,10 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	solution := New(readInput(t))
+	solution, err := New(readInput(t))
+	if err != nil {
+		t.Fatalf("Failed to create solution: %v", err)
+	}
 	result, err := solution.Part2()
 	
 	if err != nil {

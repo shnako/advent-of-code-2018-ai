@@ -14,7 +14,10 @@ func main() {
 		log.Fatalf("Failed to read input: %v", err)
 	}
 	
-	solution := day11.New(string(input))
+	solution, err := day11.New(string(input))
+	if err != nil {
+		log.Fatalf("Init failed: %v", err)
+	}
 	
 	part1, err := solution.Part1()
 	if err != nil {

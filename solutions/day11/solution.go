@@ -12,6 +12,7 @@
 package day11
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -22,15 +23,17 @@ type Solution struct {
 	summedArea   [301][301]int // Summed-area table for efficient range queries
 }
 
-func New(input string) *Solution {
-	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
-	serialNumber, _ := strconv.Atoi(input)
-	
-	solution := &Solution{serialNumber: serialNumber}
-	solution.calculateGrid()
-	solution.buildSummedAreaTable()
-	
-	return solution
+func New(input string) (*Solution, error) {
+	trimmed := strings.TrimSpace(input)
+	serialNumber, err := strconv.Atoi(trimmed)
+	if err != nil {
+		return nil, fmt.Errorf("invalid serial number %q: %w", trimmed, err)
+	}
+
+	s := &Solution{serialNumber: serialNumber}
+	s.calculateGrid()
+	s.buildSummedAreaTable()
+	return s, nil
 }
 
 func (s *Solution) Part1() (string, error) {
