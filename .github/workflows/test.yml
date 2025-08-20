@@ -33,6 +33,8 @@ jobs:
       run: go mod download
       
     - name: Run tests with coverage
+      env:
+        CGO_ENABLED: 1
       run: |
         go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
         echo "Test execution completed"
@@ -80,6 +82,8 @@ jobs:
         path: benchmark-results.txt
         
     - name: Check for race conditions
+      env:
+        CGO_ENABLED: 1
       run: |
         echo "Checking for race conditions..."
         go test -race ./...
