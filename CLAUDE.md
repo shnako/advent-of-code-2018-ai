@@ -50,8 +50,12 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - CodeRabbit will provide specific suggestions, optimizations, or issues to address
       - **NEVER MERGE while CodeRabbit shows "Currently processing new changes" or similar processing messages**
       - **WAIT until CodeRabbit fully completes its review** - processing messages indicate incomplete review
-    - Once CodeRabbit's ACTUAL review comments are detected, address ALL comments by making necessary code changes
-    - Push changes to the feature branch
+    - **CRITICAL: MANDATORY ADDRESS ALL FEEDBACK**: Once CodeRabbit's ACTUAL review comments are detected, you MUST address ALL comments by making necessary code changes
+      - **NEVER SKIP FEEDBACK**: Every single piece of actionable feedback must be addressed before merging
+      - **NO EXCEPTIONS**: CodeRabbit feedback is not optional - it must all be implemented
+      - Make the required code changes to fix all issues, suggestions, and improvements
+      - **DO NOT PROCEED TO BUILD/MERGE without addressing feedback first**
+    - Push changes to the feature branch after addressing all feedback
     - **CRITICAL**: After EVERY push, CodeRabbit will automatically re-review and potentially add NEW comments
     - **ONLY REQUEST REVIEW AFTER RATE LIMITS**: Post `@coderabbitai review` ONLY when rate limits have been encountered - normal pushes trigger automatic review
     - **AFTER RATE LIMIT RECOVERY**: When rate limit expires, MUST post `@coderabbitai review` to actually get the review - waiting without requesting is pointless
@@ -63,11 +67,12 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - **DO NOT MERGE after just a summary** - wait for the complete review process
     - **DO NOT MERGE while CodeRabbit is still processing** - wait for processing to complete fully
     - **DO NOT STOP**: This process should be fully automated without user intervention
-18. **Verify builds and tests**: Before merging, ensure all builds and tests pass
-    - Run `go build ./...` to verify the entire project builds successfully
-    - Run `go test ./...` to verify all tests pass across the project
-    - Fix any build errors or test failures before proceeding to merge
-19. **Merge PR**: Once CodeRabbit review is complete, builds pass, and tests pass, merge the PR using "Squash and merge"
+18. **Verify builds and tests**: **CRITICAL - ALL MUST PASS**: After addressing all CodeRabbit feedback, ensure builds and tests pass
+    - **MANDATORY**: Run `go build ./...` to verify the entire project builds successfully
+    - **MANDATORY**: Run `go test ./...` to verify all tests pass across the project
+    - **STOP IF ANY FAILURES**: Fix any build errors or test failures before proceeding to merge
+    - **NO MERGE until 100% success**: Both build and test commands must complete without any errors
+19. **Merge PR**: **ONLY** after CodeRabbit review is complete, all feedback addressed, builds pass, and tests pass, merge the PR using "Squash and merge"
 20. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
     - Did I implement and test both parts?
