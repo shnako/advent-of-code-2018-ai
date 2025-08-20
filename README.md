@@ -28,7 +28,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 18  | [Day 18: Settlers of The North Pole](https://adventofcode.com/2018/day/18) | [solution.go](solutions/day18/solution.go) | [solution_test.go](solutions/day18/solution_test.go) | [input.txt](solutions/day18/input.txt) | [puzzle.txt](solutions/day18/puzzle.txt) |
 | 19  | [Day 19: Go With The Flow](https://adventofcode.com/2018/day/19) | [solution.go](solutions/day19/solution.go) | [solution_test.go](solutions/day19/solution_test.go) | [input.txt](solutions/day19/input.txt) | [puzzle.txt](solutions/day19/puzzle.txt) |
 | 20  | [Day 20: A Regular Map](https://adventofcode.com/2018/day/20) | [solution.go](solutions/day20/solution.go) | [solution_test.go](solutions/day20/solution_test.go) | [input.txt](solutions/day20/input.txt) | [puzzle.txt](solutions/day20/puzzle.txt) |
-| 21  | [Day 21](https://adventofcode.com/2018/day/21) | - | - | - | - |
+| 21  | [Day 21: Chronal Conversion](https://adventofcode.com/2018/day/21) | [solution.go](solutions/day21/solution.go) | [solution_test.go](solutions/day21/solution_test.go) | [input.txt](solutions/day21/input.txt) | [puzzle.txt](solutions/day21/puzzle.txt) |
 | 22  | [Day 22](https://adventofcode.com/2018/day/22) | - | - | - | - |
 | 23  | [Day 23](https://adventofcode.com/2018/day/23) | - | - | - | - |
 | 24  | [Day 24](https://adventofcode.com/2018/day/24) | - | - | - | - |
