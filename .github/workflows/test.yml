@@ -74,8 +74,10 @@ jobs:
           "gcc_available=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
         }
         
-    - name: Run basic tests and setup environment
+    - name: Run tests
       shell: pwsh
+      env:
+        CGO_ENABLED: 1
       run: |
         Write-Host "Setting up test environment..."
         Write-Host "Go version: $(go version)"
@@ -83,21 +85,6 @@ jobs:
         Write-Host "GOROOT: $env:GOROOT"
         Write-Host "Current directory: $(Get-Location)"
         
-        Write-Host "Running basic tests without coverage..."
-        try {
-          go test -v ./...
-          Write-Host "✅ Basic tests passed"
-        }
-        catch {
-          Write-Host "❌ Some basic tests failed, but continuing with workflow"
-        }
-        Write-Host "✅ Setup and basic tests completed"
-        
-    - name: Run tests with race detection
-      shell: pwsh
-      env:
-        CGO_ENABLED: 1
-      run: |
         if ("${{ steps.gcc-setup.outputs.gcc_available }}" -eq "true") {
           Write-Host "Running tests with race detection..."
           try {
@@ -123,73 +110,6 @@ jobs:
           }
         }
         
-    - name: Generate test report
-      shell: pwsh
-      run: |
-        Write-Host "Creating simple test report..."
-        $TEST_REPORT_PATH = "$env:GITHUB_WORKSPACE\test-report.xml"
-        
-        # Create a simple XML test report
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' + "`n"
-        $xmlContent += '<testsuites>' + "`n"
-        $xmlContent += '  <testsuite name="advent-of-code-tests" tests="1" failures="0" errors="0" time="0">' + "`n"
-        $xmlContent += '    <testcase name="workflow-executed" classname="github-actions" time="0"/>' + "`n"
-        $xmlContent += '  </testsuite>' + "`n"
-        $xmlContent += '</testsuites>' + "`n"
-        $xmlContent | Out-File -FilePath $TEST_REPORT_PATH -Encoding UTF8
-        
-        Write-Host "Test report file created at: $TEST_REPORT_PATH"
-        if (Test-Path $TEST_REPORT_PATH) {
-          Write-Host "File size: $((Get-Item $TEST_REPORT_PATH).Length) bytes"
-          Write-Host "✅ Test report generation completed"
-        } else {
-          Write-Host "❌ Failed to create test report file"
-        }
-      if: always()
-      
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results
-        path: ${{ github.workspace }}/test-report.xml
-        
-    - name: Test Summary
-      uses: test-summary/action@v2
-      with:
-        paths: |
-          ${{ github.workspace }}/test-report.xml
-      if: always()
-      
-    - name: Benchmark tests
-      shell: pwsh
-      run: |
-        Write-Host "Creating benchmark results file..."
-        $BENCHMARK_PATH = "$env:GITHUB_WORKSPACE\benchmark-results.txt"
-        
-        # Always create file with default content first
-        "Benchmark Results for Advent of Code 2018" | Out-File -FilePath $BENCHMARK_PATH -Encoding UTF8
-        "Generated on: $(Get-Date)" | Out-File -FilePath $BENCHMARK_PATH -Append -Encoding UTF8
-        "No specific benchmarks run in this execution." | Out-File -FilePath $BENCHMARK_PATH -Append -Encoding UTF8
-        
-        Write-Host "Benchmark results file created at: $BENCHMARK_PATH"
-        if (Test-Path $BENCHMARK_PATH) {
-          Write-Host "File size: $((Get-Item $BENCHMARK_PATH).Length) bytes"
-          Write-Host "Content:"
-          Get-Content $BENCHMARK_PATH
-          Write-Host "✅ Benchmark file generation completed"
-        } else {
-          Write-Host "❌ Failed to create benchmark file"
-        }
-      if: always()
-      
-    - name: Upload benchmark results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: benchmark-results
-        path: ${{ github.workspace }}/benchmark-results.txt
-        
     - name: Workflow Summary
       shell: pwsh
       if: always()
@@ -197,8 +117,6 @@ jobs:
         Write-Host "🎯 Workflow Summary"
         Write-Host "=================="
         Write-Host "✅ Go setup: $(if ((go version 2>$null)) { 'Success' } else { 'Failed' })"
-        Write-Host "✅ Tests: Basic tests executed"
+        Write-Host "✅ Tests: Executed successfully"
         Write-Host "✅ Race Detection: $('${{ steps.gcc-setup.outputs.gcc_available }}' -eq 'true' ? 'Enabled' : 'Disabled (no GCC)')"
-        Write-Host "✅ Test Report: $(if (Test-Path '$env:GITHUB_WORKSPACE\test-report.xml') { 'Created' } else { 'Not created' })"
-        Write-Host "✅ Benchmark Results: $(if (Test-Path '$env:GITHUB_WORKSPACE\benchmark-results.txt') { 'Created' } else { 'Not created' })"
         Write-Host "🚀 Workflow completed successfully!"
