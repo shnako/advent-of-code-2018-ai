@@ -61,10 +61,13 @@ func (s *Solution) Part2() (int, error) {
 }
 
 func (s *Solution) parseInput() ([]Sample, [][4]int) {
-	parts := strings.Split(s.input, "\n\n\n")
+	// Normalize line endings first
+	normalizedInput := strings.ReplaceAll(s.input, "\r\n", "\n")
+	
+	parts := strings.Split(normalizedInput, "\n\n\n")
 	if len(parts) < 2 {
-		// Handle case where there might be different separators
-		parts = strings.Split(s.input, "\r\n\r\n\r\n")
+		// Try different separators in case of formatting issues
+		parts = strings.Split(normalizedInput, "\n\n\n\n")
 	}
 	
 	sampleLines := strings.Split(strings.TrimSpace(parts[0]), "\n")
@@ -178,7 +181,14 @@ func (s *Solution) deduceOpcodes(samples []Sample) map[int]string {
 	mapping := make(map[int]string)
 	used := make(map[string]bool)
 	
-	for len(mapping) < 16 {
+	// Safety counter to prevent infinite loops
+	maxIterations := 100
+	iterations := 0
+	
+	for len(mapping) < 16 && iterations < maxIterations {
+		iterations++
+		progress := false
+		
 		// Find opcode numbers with only one possible operation
 		for opcodeNum := 0; opcodeNum < 16; opcodeNum++ {
 			if _, found := mapping[opcodeNum]; found {
@@ -195,7 +205,13 @@ func (s *Solution) deduceOpcodes(samples []Sample) map[int]string {
 			if len(candidates) == 1 {
 				mapping[opcodeNum] = candidates[0]
 				used[candidates[0]] = true
+				progress = true
 			}
+		}
+		
+		// If no progress was made, we might be stuck
+		if !progress {
+			break
 		}
 	}
 	
