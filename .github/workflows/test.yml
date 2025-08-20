@@ -43,21 +43,30 @@ jobs:
           echo "gcc_available=false" >> $GITHUB_OUTPUT
         fi
         
+    - name: Run basic tests first
+      shell: bash
+      run: |
+        echo "Running basic tests without coverage..."
+        go test -v ./...
+        echo "✅ Basic tests passed"
+        
     - name: Run tests with coverage and race detection (if GCC available)
       shell: bash
       if: steps.gcc-check.outputs.gcc_available == 'true'
       env:
         CGO_ENABLED: 1
       run: |
+        echo "Running tests with race detection and coverage..."
         go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
-        echo "Test execution completed with race detection"
+        echo "✅ Test execution completed with race detection"
         
     - name: Run tests with coverage (without race detection)
       shell: bash
       if: steps.gcc-check.outputs.gcc_available == 'false'
       run: |
+        echo "Running tests with coverage (no race detection)..."
         go test -v -coverprofile=coverage.out -covermode=atomic ./...
-        echo "Test execution completed without race detection (GCC not available)"
+        echo "✅ Test execution completed without race detection"
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
