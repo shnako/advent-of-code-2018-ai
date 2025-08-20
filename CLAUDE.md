@@ -37,9 +37,13 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - **SUMMARY ONLY**: If CodeRabbit only provides a walkthrough/summary without specific code feedback, WAIT for the actual review
       - **ACTUAL REVIEW**: Look for specific code review comments with suggestions, improvements, or issues
     - **RATE LIMIT HANDLING**: If CodeRabbit indicates rate limit exceeded:
-      - Wait for the specified time (usually 1-5 minutes)
-      - Post comment `@coderabbitai review` to trigger manual review
-      - Wait for CodeRabbit to respond and provide feedback
+      - **NEVER MERGE during rate limit** — this bypasses the review process entirely
+      - Wait for the FULL specified time plus a small buffer (e.g., "6 minutes and 56 seconds" → wait 7 minutes + 10 seconds) to avoid early re-triggers
+      - Post `@coderabbitai review` ONLY ONCE per rate-limit event after the wait time (do not spam repeated triggers)
+      - Add a PR comment noting the rate-limit message and the next ETA before sleeping (for auditability)
+      - Continue checking every 60 seconds until CodeRabbit provides actual, line-level review feedback
+      - If the same rate-limit recurs 3 times consecutively or total wait exceeds 30 minutes, follow "Handling Rate Limits" below (treat as a daily cap) and pause/resume instead of looping indefinitely
+      - **CRITICAL**: Rate limit does NOT excuse skipping the review — follow the bounded retry policy above, then pause according to "Handling Rate Limits"
     - **ONLY PROCEED when CodeRabbit provides ACTUAL CODE REVIEW**:
       - Look for specific line-by-line comments with actionable feedback
       - Ignore initial summary/walkthrough - this is NOT the review
