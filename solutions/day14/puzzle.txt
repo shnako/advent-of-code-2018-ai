@@ -46,8 +46,6 @@ The Elves think their skill will improve after making a few recipes (your puzzle
 
 Your puzzle answer was `1776718175`.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---As it turns out, you got the Elves' plan backwards.  They actually want to know how many recipes appear on the scoreboard to the left of the first recipes whose scores are the digits from your puzzle input.
 
 - `51589` first appears after `9` recipes.
