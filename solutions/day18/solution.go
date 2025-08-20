@@ -71,7 +71,9 @@ func (s *Solution) Part2() (int, error) {
 func (s *Solution) parseInput() {
 	lines := strings.Split(s.input, "\n")
 	s.height = len(lines)
-	s.width = len(lines[0])
+	if s.height > 0 {
+		s.width = len(lines[0])
+	}
 	
 	s.grid = make([][]rune, s.height)
 	for i, line := range lines {
@@ -128,6 +130,10 @@ func (s *Solution) countAdjacent(x, y int) (trees, lumberyards, open int) {
 	for _, dir := range directions {
 		nx, ny := x+dir[0], y+dir[1]
 		if nx >= 0 && nx < s.width && ny >= 0 && ny < s.height {
+			// Additional bounds checking to prevent panic
+			if ny >= len(s.grid) || nx >= len(s.grid[ny]) {
+				continue
+			}
 			switch s.grid[ny][nx] {
 			case '.':
 				open++
