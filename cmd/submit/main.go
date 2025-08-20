@@ -81,14 +81,14 @@ func main() {
 	// Check for common responses
 	if strings.Contains(responseText, "That's the right answer") {
 		fmt.Printf("✓ Day %d Part %d: Correct! Answer: %s\n", *day, *part, *answer)
-		
+
 		// Check if we got a new puzzle part
 		if strings.Contains(responseText, "You've unlocked") || strings.Contains(responseText, "second half") {
 			fmt.Println("Part 2 unlocked! Run fetch command again to get the updated puzzle.")
 		}
 	} else if strings.Contains(responseText, "That's not the right answer") {
 		fmt.Printf("✗ Day %d Part %d: Incorrect answer: %s\n", *day, *part, *answer)
-		
+
 		// Extract wait time if present
 		if strings.Contains(responseText, "Please wait") {
 			start := strings.Index(responseText, "Please wait")
@@ -97,7 +97,7 @@ func main() {
 				fmt.Println(responseText[start : start+end+20])
 			}
 		}
-		
+
 		// Check if too high or too low
 		if strings.Contains(responseText, "too high") {
 			fmt.Println("Hint: Your answer is too high")
@@ -120,14 +120,14 @@ func getResponseSnippet(html string) string {
 	if start == -1 {
 		return "Could not parse response"
 	}
-	
+
 	end := strings.Index(html[start:], "</article>")
 	if end == -1 {
 		return "Could not parse response"
 	}
-	
+
 	article := html[start : start+end+10]
-	
+
 	// Remove HTML tags for readability
 	text := article
 	for {
@@ -141,18 +141,18 @@ func getResponseSnippet(html string) string {
 		}
 		text = text[:tagStart] + " " + text[tagStart+tagEnd+1:]
 	}
-	
+
 	// Clean up whitespace
 	text = strings.ReplaceAll(text, "\n", " ")
 	text = strings.ReplaceAll(text, "\t", " ")
 	for strings.Contains(text, "  ") {
 		text = strings.ReplaceAll(text, "  ", " ")
 	}
-	
+
 	text = strings.TrimSpace(text)
 	if len(text) > 200 {
 		text = text[:200] + "..."
 	}
-	
+
 	return text
 }

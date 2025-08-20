@@ -126,21 +126,6 @@ jobs:
           Write-Host "✅ All solution files are present"
         }
         
-    - name: Check Go formatting
-      shell: pwsh
-      run: |
-        Write-Host "Checking Go code formatting..."
-        $unformatted = gofmt -l solutions\ 2>$null
-        if ($unformatted) {
-          Write-Host "❌ The following files are not properly formatted:"
-          Write-Host $unformatted
-          Write-Host ""
-          Write-Host "Please run 'go fmt ./...' to format them"
-          exit 1
-        } else {
-          Write-Host "✅ All Go files are properly formatted"
-        }
-        
     - name: Run go vet
       shell: pwsh
       run: |

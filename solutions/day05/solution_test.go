@@ -46,7 +46,7 @@ func TestPart1Examples(t *testing.T) {
 
 func TestPart2Examples(t *testing.T) {
 	input := "dabAcCaCBAcCcaDA"
-	
+
 	solution := New(input)
 	result, err := solution.Part2()
 

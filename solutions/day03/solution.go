@@ -1,10 +1,10 @@
 /*
  * Day 3: No Matter How You Slice It
- * 
+ *
  * Part 1: Count square inches of fabric that are within two or more claims.
  * Parse fabric claims in format "#ID @ x,y: wxh" and track overlapping areas
  * on a 2D grid to count squares claimed by multiple elves.
- * 
+ *
  * Part 2: Find the ID of the claim that doesn't overlap with any other claim.
  * This requires tracking which specific claims occupy each square inch.
  */
