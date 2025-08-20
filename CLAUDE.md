@@ -72,12 +72,14 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - **DO NOT MERGE after just a summary** - wait for the complete review process
     - **DO NOT MERGE while CodeRabbit is still processing** - wait for processing to complete fully
     - **DO NOT STOP**: This process should be fully automated without user intervention
-18. **Verify builds and tests**: **CRITICAL - ALL MUST PASS**: After addressing all CodeRabbit feedback, ensure builds and tests pass
+18. **Verify ALL CI checks pass**: **CRITICAL - ALL THREE CHECKS MUST PASS**: After addressing all CodeRabbit feedback, ensure ALL CI checks pass
     - **MANDATORY**: Run `go build ./...` to verify the entire project builds successfully
     - **MANDATORY**: Run `go test ./...` to verify all tests pass across the project
-    - **STOP IF ANY FAILURES**: Fix any build errors or test failures before proceeding to merge
-    - **NO MERGE until 100% success**: Both build and test commands must complete without any errors
-19. **Merge PR**: **ONLY** after CodeRabbit review is complete, all feedback addressed, builds pass, and tests pass, merge the PR using "Squash and merge"
+    - **MANDATORY**: Ensure validation check passes - fix ANY puzzle.txt formatting issues across ALL days
+    - **THREE REQUIRED CHECKS**: 1) Tests must pass, 2) Validation must pass, 3) CodeRabbit must complete
+    - **STOP IF ANY FAILURES**: Fix any build errors, test failures, OR validation failures before proceeding to merge
+    - **NO MERGE until 100% success**: All three CI checks (test, validate, CodeRabbit) must be green/passing
+19. **Merge PR**: **ONLY** after ALL THREE CI checks pass (test=SUCCESS, validate=SUCCESS, CodeRabbit=SUCCESS), merge the PR using "Squash and merge"
 20. **VERIFY COMPLIANCE**: Double-check that ALL steps in this CLAUDE.md workflow have been followed:
     - Did I fetch both puzzle and input?
     - Did I implement and test both parts?
