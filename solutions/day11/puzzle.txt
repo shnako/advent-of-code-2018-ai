@@ -1,4 +1,7 @@
+https://adventofcode.com/2018/day/11
+
 --- Day 11: Chronal Charge ---
+
 You watch the Elves and their sleigh fade into the distance as they head toward the North Pole.
 
 Actually, you're the one fading. The falling sensation returns.
@@ -86,3 +89,7 @@ For example:
 - For grid serial number `42`, the largest total square (with a total power of `119`) is 12x12 and has a top-left corner of `232,251`, so its identifier is `*232,251,12*`.
 
 *What is the `X,Y,size` identifier of the square with the largest total power?*
+
+Your puzzle answer was `236,252,12`.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

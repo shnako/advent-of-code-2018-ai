@@ -20,135 +20,149 @@ jobs:
         go-version: '1.21'
         
     - name: Validate puzzle.txt formatting and completion
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Checking puzzle.txt file formatting and completion status..."
-        failed=0
+        Write-Host "Checking puzzle.txt file formatting and completion status..."
+        $failed = $false
         
-        for file in solutions/day*/puzzle.txt; do
-          if [ -f "$file" ]; then
-            echo "Checking $file"
-            
-            # Check if first line is a URL
-            first_line=$(head -1 "$file")
-            if ! [[ "$first_line" =~ ^https://adventofcode.com/2018/day/[0-9]+$ ]]; then
-              echo "❌ $file: First line should be the Advent of Code 2018 URL"
-              failed=1
-            fi
-            
-            # Check if second line is empty
-            second_line=$(sed -n '2p' "$file")
-            if [ -n "$second_line" ]; then
-              echo "❌ $file: Second line should be empty"
-              failed=1
-            fi
-            
-            # Check if third line is NOT empty (should contain the title)
-            third_line=$(sed -n '3p' "$file")
-            if [ -z "$third_line" ]; then
-              echo "❌ $file: Third line should contain the problem title"
-              failed=1
-            elif ! [[ "$third_line" =~ ^---\ Day\ [0-9]+:\ .+\ ---$ ]]; then
-              echo "❌ $file: Third line should match format '--- Day X: Title ---'"
-              failed=1
-            else
+        $puzzleFiles = Get-ChildItem -Path "solutions\day*\puzzle.txt" -ErrorAction SilentlyContinue
+        foreach ($file in $puzzleFiles) {
+          Write-Host "Checking $($file.FullName)"
+          
+          $lines = Get-Content $file.FullName -ErrorAction SilentlyContinue
+          if ($lines.Count -eq 0) {
+            Write-Host "❌ $($file.Name): File is empty"
+            $failed = $true
+            continue
+          }
+          
+          # Check if first line is a URL
+          $firstLine = $lines[0]
+          if ($firstLine -notmatch '^https://adventofcode\.com/2018/day/\d+$') {
+            Write-Host "❌ $($file.Name): First line should be the Advent of Code 2018 URL"
+            Write-Host "   Found: '$firstLine'"
+            $failed = $true
+          }
+          
+          # Check if second line is empty
+          if ($lines.Count -gt 1 -and $lines[1].Trim() -ne "") {
+            Write-Host "❌ $($file.Name): Second line should be empty"
+            $failed = $true
+          }
+          
+          # Check if third line contains the title
+          if ($lines.Count -gt 2) {
+            $thirdLine = $lines[2]
+            if ($thirdLine.Trim() -eq "") {
+              Write-Host "❌ $($file.Name): Third line should contain the problem title"
+              $failed = $true
+            } elseif ($thirdLine -notmatch '^--- Day \d+: .+ ---$') {
+              Write-Host "❌ $($file.Name): Third line should match format '--- Day X: Title ---'"
+              Write-Host "   Found: '$thirdLine'"
+              $failed = $true
+            } else {
               # Check if last line indicates puzzle completion
-              last_line=$(tail -1 "$file")
-              if [[ "$last_line" != "Both parts of this puzzle are complete! They provide two gold stars: **" ]]; then
-                echo "❌ $file: Last line should be 'Both parts of this puzzle are complete! They provide two gold stars: **'"
-                echo "   Found: '$last_line'"
-                failed=1
-              else
-                echo "✅ $file: Format is correct and puzzle is complete"
-              fi
-            fi
-          fi
-        done
+              $lastLine = $lines[-1]
+              if ($lastLine -ne "Both parts of this puzzle are complete! They provide two gold stars: **") {
+                Write-Host "❌ $($file.Name): Last line should be 'Both parts of this puzzle are complete! They provide two gold stars: **'"
+                Write-Host "   Found: '$lastLine'"
+                $failed = $true
+              } else {
+                Write-Host "✅ $($file.Name): Format is correct and puzzle is complete"
+              }
+            }
+          } else {
+            Write-Host "❌ $($file.Name): File too short, missing title line"
+            $failed = $true
+          }
+        }
         
-        if [ $failed -eq 1 ]; then
-          echo "❌ Validation failed!"
+        if ($failed) {
+          Write-Host "❌ Validation failed!"
           exit 1
-        else
-          echo "✅ All puzzle.txt files are correctly formatted"
-        fi
+        } else {
+          Write-Host "✅ All puzzle.txt files are correctly formatted"
+        }
         
     - name: Validate solution files exist
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Checking that all required solution files exist..."
-        failed=0
+        Write-Host "Checking that all required solution files exist..."
+        $failed = $false
         
-        for day in $(seq -f "%02g" 1 25); do
-          if [ -d "solutions/day$day" ]; then
-            echo "Checking day$day..."
+        for ($day = 1; $day -le 25; $day++) {
+          $dayStr = "day{0:D2}" -f $day
+          $dayPath = "solutions\$dayStr"
+          
+          if (Test-Path $dayPath) {
+            Write-Host "Checking $dayStr..."
             
-            # Check solution.go exists
-            if [ ! -f "solutions/day$day/solution.go" ]; then
-              echo "❌ Missing: solutions/day$day/solution.go"
-              failed=1
-            fi
+            $requiredFiles = @(
+              "solution.go",
+              "solution_test.go", 
+              "input.txt",
+              "puzzle.txt",
+              "cmd\main.go"
+            )
             
-            # Check solution_test.go exists
-            if [ ! -f "solutions/day$day/solution_test.go" ]; then
-              echo "❌ Missing: solutions/day$day/solution_test.go"
-              failed=1
-            fi
+            foreach ($file in $requiredFiles) {
+              $filePath = Join-Path $dayPath $file
+              if (!(Test-Path $filePath)) {
+                Write-Host "❌ Missing: $dayPath\$file"
+                $failed = $true
+              }
+            }
             
-            # Check input.txt exists
-            if [ ! -f "solutions/day$day/input.txt" ]; then
-              echo "❌ Missing: solutions/day$day/input.txt"
-              failed=1
-            fi
-            
-            # Check puzzle.txt exists
-            if [ ! -f "solutions/day$day/puzzle.txt" ]; then
-              echo "❌ Missing: solutions/day$day/puzzle.txt"
-              failed=1
-            fi
-            
-            # Check main.go exists (for running the solution standalone)
-            if [ ! -f "solutions/day$day/main.go" ]; then
-              echo "❌ Missing: solutions/day$day/main.go"
-              failed=1
-            fi
-            
-            if [ $failed -eq 0 ]; then
-              echo "✅ day$day: All required files present"
-            fi
-          fi
-        done
+            if (!$failed) {
+              Write-Host "✅ $dayStr`: All required files present"
+            }
+          }
+        }
         
-        if [ $failed -eq 1 ]; then
-          echo "❌ Validation failed!"
+        if ($failed) {
+          Write-Host "❌ Validation failed!"
           exit 1
-        else
-          echo "✅ All solution files are present"
-        fi
+        } else {
+          Write-Host "✅ All solution files are present"
+        }
         
     - name: Check Go formatting
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Checking Go code formatting..."
-        unformatted=$(gofmt -l solutions/)
-        if [ -n "$unformatted" ]; then
-          echo "❌ The following files are not properly formatted:"
-          echo "$unformatted"
-          echo ""
-          echo "Please run 'go fmt ./...' to format them"
+        Write-Host "Checking Go code formatting..."
+        $unformatted = gofmt -l solutions\ 2>$null
+        if ($unformatted) {
+          Write-Host "❌ The following files are not properly formatted:"
+          Write-Host $unformatted
+          Write-Host ""
+          Write-Host "Please run 'go fmt ./...' to format them"
           exit 1
-        else
-          echo "✅ All Go files are properly formatted"
-        fi
+        } else {
+          Write-Host "✅ All Go files are properly formatted"
+        }
         
     - name: Run go vet
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Running go vet to check for common issues..."
-        go vet ./...
-        echo "✅ No issues found by go vet"
+        Write-Host "Running go vet to check for common issues..."
+        try {
+          go vet ./...
+          Write-Host "✅ No issues found by go vet"
+        }
+        catch {
+          Write-Host "❌ go vet found issues"
+          exit 1
+        }
         
     - name: Run solution tests
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Running tests for all solutions..."
-        go test ./solutions/... -v
+        Write-Host "Running tests for all solutions..."
+        try {
+          go test ./solutions/... -v
+          Write-Host "✅ All solution tests passed"
+        }
+        catch {
+          Write-Host "❌ Some solution tests failed"
+          exit 1
+        }
