@@ -1,4 +1,8 @@
---- Day 19: Go With The Flow ---With the Elves well on their way constructing the North Pole base, you turn your attention back to understanding the inner workings of programming the device.
+https://adventofcode.com/2018/day/19
+
+--- Day 19: Go With The Flow ---
+
+With the Elves well on their way constructing the North Pole base, you turn your attention back to understanding the inner workings of programming the device.
 
 You can't help but notice that the device's opcodes don't contain any *flow control* like jump instructions. The device's manual goes on to explain:
 
@@ -60,3 +64,7 @@ The first half of this puzzle is complete! It provides one gold star: *
 --- Part Two ---A new background process immediately spins up in its place. It appears identical, but on closer inspection, you notice that *this time, register `0` started with the value `1`*.
 
 *What value is left in register `0`* when this new background process halts?
+
+Your puzzle answer was `10708992`.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
