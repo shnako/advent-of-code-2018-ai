@@ -22,7 +22,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 12  | [Day 12: Subterranean Sustainability](https://adventofcode.com/2018/day/12) | [solution.go](solutions/day12/solution.go) | [solution_test.go](solutions/day12/solution_test.go) | [input.txt](solutions/day12/input.txt) | [puzzle.txt](solutions/day12/puzzle.txt) |
 | 13  | [Day 13](https://adventofcode.com/2018/day/13) | - | - | - | - |
 | 14  | [Day 14: Chocolate Charts](https://adventofcode.com/2018/day/14) | [solution.go](solutions/day14/solution.go) | [solution_test.go](solutions/day14/solution_test.go) | [input.txt](solutions/day14/input.txt) | [puzzle.txt](solutions/day14/puzzle.txt) |
-| 15  | [Day 15](https://adventofcode.com/2018/day/15) | - | - | - | - |
+| 15  | [Day 15: Beverage Bandits](https://adventofcode.com/2018/day/15) | [solution.go](solutions/day15/solution.go) | [solution_test.go](solutions/day15/solution_test.go) | [input.txt](solutions/day15/input.txt) | [puzzle.txt](solutions/day15/puzzle.txt) |
 | 16  | [Day 16](https://adventofcode.com/2018/day/16) | - | - | - | - |
 | 17  | [Day 17](https://adventofcode.com/2018/day/17) | - | - | - | - |
 | 18  | [Day 18](https://adventofcode.com/2018/day/18) | - | - | - | - |
