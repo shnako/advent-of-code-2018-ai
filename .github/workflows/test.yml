@@ -161,14 +161,13 @@ jobs:
         # Ensure we always have a test report file
         if (!(Test-Path $TEST_REPORT_PATH) -or (Get-Item $TEST_REPORT_PATH).Length -eq 0) {
           Write-Host "Creating fallback test report at $TEST_REPORT_PATH..."
-          @'
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">
-    <testcase name="workflow-executed" classname="github-actions" time="0"/>
-  </testsuite>
-</testsuites>
-'@ | Out-File -FilePath $TEST_REPORT_PATH -Encoding UTF8
+          $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' + "`n"
+          $xmlContent += '<testsuites>' + "`n"
+          $xmlContent += '  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">' + "`n"
+          $xmlContent += '    <testcase name="workflow-executed" classname="github-actions" time="0"/>' + "`n"
+          $xmlContent += '  </testsuite>' + "`n"
+          $xmlContent += '</testsuites>' + "`n"
+          $xmlContent | Out-File -FilePath $TEST_REPORT_PATH -Encoding UTF8
         }
         
         Write-Host "Test report file created:"
