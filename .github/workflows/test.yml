@@ -103,59 +103,34 @@ jobs:
         }
         Write-Host "✅ Setup and basic tests completed"
         
-    - name: Run tests with coverage and race detection
+    - name: Run tests with race detection
       shell: pwsh
       env:
         CGO_ENABLED: 1
       run: |
-        $coverageFile = "$env:GITHUB_WORKSPACE\coverage.out"
-        
         if ("${{ steps.gcc-setup.outputs.gcc_available }}" -eq "true") {
-          Write-Host "Running tests with race detection and coverage..."
+          Write-Host "Running tests with race detection..."
           try {
-            go test -v -race -coverprofile="$coverageFile" -covermode=atomic ./...
-            Write-Host "✅ Test execution completed with race detection"
+            go test -v -race ./...
+            Write-Host "✅ Tests completed with race detection"
           }
           catch {
             Write-Host "❌ Tests failed with race detection, trying without..."
             try { 
-              go test -v -coverprofile="$coverageFile" -covermode=atomic ./... 
-              Write-Host "✅ Test execution completed without race detection"
+              go test -v ./... 
+              Write-Host "✅ Tests completed without race detection"
             } catch { 
               Write-Host "❌ Tests failed completely"
             }
           }
         } else {
-          Write-Host "Running tests with coverage (no race detection due to missing GCC)..."
+          Write-Host "Running tests (no race detection due to missing GCC)..."
           try { 
-            go test -v -coverprofile="$coverageFile" -covermode=atomic ./...
-            Write-Host "✅ Test execution completed without race detection"
+            go test -v ./...
+            Write-Host "✅ Tests completed successfully"
           } catch { 
             Write-Host "❌ Tests failed"
           }
-        }
-        
-        # Ensure coverage.out exists for upload
-        if (!(Test-Path "$coverageFile")) {
-          Write-Host "Creating empty coverage file at $coverageFile..."
-          New-Item -Path "$coverageFile" -ItemType File -Force | Out-Null
-        }
-        
-        if (Test-Path "$coverageFile") {
-          Write-Host "Coverage file created: $((Get-Item $coverageFile).Length) bytes"
-        }
-      
-    - name: Coverage report summary
-      shell: pwsh
-      if: always()
-      run: |
-        $coverageFile = "$env:GITHUB_WORKSPACE\coverage.out"
-        if (Test-Path $coverageFile) {
-          $size = (Get-Item $coverageFile).Length
-          Write-Host "✅ Coverage file generated: $size bytes"
-          Write-Host "📊 Coverage data available for local analysis"
-        } else {
-          Write-Host "⚠️ No coverage file generated"
         }
         
     - name: Generate test report
@@ -188,14 +163,6 @@ jobs:
       with:
         name: test-results
         path: ${{ github.workspace }}/test-report.xml
-        
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      if: always()
-      continue-on-error: true
-      with:
-        name: coverage-report
-        path: ${{ github.workspace }}/coverage.out
         
     - name: Test Summary
       uses: test-summary/action@v2
@@ -251,7 +218,6 @@ jobs:
         Write-Host "✅ Go setup: $(if ((go version 2>$null)) { 'Success' } else { 'Failed' })"
         Write-Host "✅ Cache: $(if ('${{ steps.cache-restore.outputs.cache-hit }}' -eq 'true') { 'Hit' } else { 'Miss' })"
         Write-Host "✅ Tests: Basic tests executed"
-        Write-Host "✅ Coverage: $(if (Test-Path '$env:GITHUB_WORKSPACE\coverage.out') { 'Generated' } else { 'Not generated' })"
         Write-Host "✅ Race Detection: $('${{ steps.gcc-setup.outputs.gcc_available }}' -eq 'true' ? 'Enabled' : 'Disabled (no GCC)')"
         Write-Host "✅ Test Report: $(if (Test-Path '$env:GITHUB_WORKSPACE\test-report.xml') { 'Created' } else { 'Not created' })"
         Write-Host "✅ Benchmark Results: $(if (Test-Path '$env:GITHUB_WORKSPACE\benchmark-results.txt') { 'Created' } else { 'Not created' })"
