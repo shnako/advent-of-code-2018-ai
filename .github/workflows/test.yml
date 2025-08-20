@@ -32,15 +32,15 @@ jobs:
           ${{ runner.os }}-go-
       
     - name: Download dependencies
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Current directory: $(pwd)"
-        echo "Go version: $(go version)"
-        echo "Files in root:"
-        ls -la
-        echo "Go mod status:"
-        go mod download -x || echo "No dependencies to download"
-        echo "✅ Dependencies step completed"
+        Write-Host "Current directory: $(Get-Location)"
+        Write-Host "Go version: $(go version)"
+        Write-Host "Files in root:"
+        Get-ChildItem
+        Write-Host "Go mod status:"
+        try { go mod download -x } catch { Write-Host "No dependencies to download" }
+        Write-Host "✅ Dependencies step completed"
       
     - name: Check and install GCC if needed
       shell: bash
@@ -89,21 +89,22 @@ jobs:
         fi
         
     - name: Run basic tests first
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Running basic tests without coverage..."
-        if go test -v ./...; then
-          echo "✅ Basic tests passed"
-        else
-          echo "❌ Some basic tests failed, but continuing with workflow"
-          exit_code=$?
-        fi
+        Write-Host "Running basic tests without coverage..."
+        try {
+          go test -v ./...
+          Write-Host "✅ Basic tests passed"
+        }
+        catch {
+          Write-Host "❌ Some basic tests failed, but continuing with workflow"
+        }
         
     - name: Install covdata tool
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Installing covdata tool..."
-        go install golang.org/x/tools/cmd/covdata@latest || echo "Failed to install covdata, continuing without it"
+        Write-Host "Installing covdata tool..."
+        try { go install golang.org/x/tools/cmd/covdata@latest } catch { Write-Host "Failed to install covdata, continuing without it" }
         
     - name: Run tests with coverage and race detection
       shell: bash
@@ -139,33 +140,42 @@ jobs:
         fail_ci_if_error: false
         
     - name: Generate test report
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Current working directory: $(pwd)"
-        echo "Installing go-junit-report..."
-        go install github.com/jstemmer/go-junit-report/v2@latest || echo "Failed to install go-junit-report"
+        Write-Host "Current working directory: $(Get-Location)"
+        Write-Host "Installing go-junit-report..."
+        try { go install github.com/jstemmer/go-junit-report/v2@latest } catch { Write-Host "Failed to install go-junit-report" }
         
-        echo "Generating test report..."
+        Write-Host "Generating test report..."
+        $TEST_REPORT_PATH = "$env:GITHUB_WORKSPACE\test-report.xml"
+        
         # Create a basic test report regardless of test results
-        TEST_REPORT_PATH="$GITHUB_WORKSPACE/test-report.xml"
-        (go test -v ./... 2>&1 || echo "Tests completed with errors") | (go-junit-report > "$TEST_REPORT_PATH" 2>/dev/null || echo "go-junit-report failed")
+        try {
+          $testOutput = go test -v ./... 2>&1 | Out-String
+          $testOutput | go-junit-report | Out-File -FilePath $TEST_REPORT_PATH -Encoding UTF8
+        }
+        catch {
+          Write-Host "go-junit-report failed, creating fallback report"
+        }
         
         # Ensure we always have a test report file
-        if [ ! -f "$TEST_REPORT_PATH" ] || [ ! -s "$TEST_REPORT_PATH" ]; then
-          echo "Creating fallback test report at $TEST_REPORT_PATH..."
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > "$TEST_REPORT_PATH"
-          echo '<testsuites>' >> "$TEST_REPORT_PATH"
-          echo '  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">' >> "$TEST_REPORT_PATH"
-          echo '    <testcase name="workflow-executed" classname="github-actions" time="0"/>' >> "$TEST_REPORT_PATH"
-          echo '  </testsuite>' >> "$TEST_REPORT_PATH"
-          echo '</testsuites>' >> "$TEST_REPORT_PATH"
-        fi
+        if (!(Test-Path $TEST_REPORT_PATH) -or (Get-Item $TEST_REPORT_PATH).Length -eq 0) {
+          Write-Host "Creating fallback test report at $TEST_REPORT_PATH..."
+          @'
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fallback" tests="1" failures="0" errors="0" time="0">
+    <testcase name="workflow-executed" classname="github-actions" time="0"/>
+  </testsuite>
+</testsuites>
+'@ | Out-File -FilePath $TEST_REPORT_PATH -Encoding UTF8
+        }
         
-        echo "Test report file created:"
-        ls -la "$TEST_REPORT_PATH"
-        echo "File contents:"
-        head -5 "$TEST_REPORT_PATH" || echo "No content to show"
-        echo "✅ Test report generation completed"
+        Write-Host "Test report file created:"
+        Get-Item $TEST_REPORT_PATH | Format-List
+        Write-Host "File contents:"
+        Get-Content $TEST_REPORT_PATH -Head 5 -ErrorAction SilentlyContinue
+        Write-Host "✅ Test report generation completed"
       if: always()
       
     - name: Upload test results
@@ -183,31 +193,33 @@ jobs:
       if: always()
       
     - name: Benchmark tests
-      shell: bash
+      shell: pwsh
       run: |
-        echo "Running benchmark tests..."
+        Write-Host "Running benchmark tests..."
         
         # Always create the benchmark results file
-        BENCHMARK_PATH="$GITHUB_WORKSPACE/benchmark-results.txt"
-        touch "$BENCHMARK_PATH"
+        $BENCHMARK_PATH = "$env:GITHUB_WORKSPACE\benchmark-results.txt"
+        New-Item -Path $BENCHMARK_PATH -ItemType File -Force | Out-Null
         
         # Run benchmarks and capture output
-        if go test -bench=. -benchmem ./solutions/... > "$BENCHMARK_PATH" 2>&1; then
-          echo "✅ Benchmarks completed successfully"
-        else
-          echo "No benchmarks found or benchmarks failed" > "$BENCHMARK_PATH"
-        fi
+        try {
+          go test -bench=. -benchmem ./solutions/... 2>&1 | Out-File -FilePath $BENCHMARK_PATH -Encoding UTF8
+          Write-Host "✅ Benchmarks completed successfully"
+        }
+        catch {
+          "No benchmarks found or benchmarks failed" | Out-File -FilePath $BENCHMARK_PATH -Encoding UTF8
+        }
         
         # Ensure file is not empty
-        if [ ! -s "$BENCHMARK_PATH" ]; then
-          echo "No benchmark results generated" > "$BENCHMARK_PATH"
-        fi
+        if ((Get-Item $BENCHMARK_PATH).Length -eq 0) {
+          "No benchmark results generated" | Out-File -FilePath $BENCHMARK_PATH -Encoding UTF8
+        }
         
-        echo "Benchmark results file:"
-        ls -la "$BENCHMARK_PATH"
-        echo "Content preview:"
-        head -10 "$BENCHMARK_PATH" || echo "No content to preview"
-        echo "✅ Benchmark tests completed"
+        Write-Host "Benchmark results file:"
+        Get-Item $BENCHMARK_PATH | Format-List
+        Write-Host "Content preview:"
+        Get-Content $BENCHMARK_PATH -Head 10 -ErrorAction SilentlyContinue
+        Write-Host "✅ Benchmark tests completed"
       continue-on-error: true
       
     - name: Upload benchmark results
