@@ -51,6 +51,8 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Once CodeRabbit's ACTUAL review comments are detected, address ALL comments by making necessary code changes
     - Push changes to the feature branch
     - **CRITICAL**: After EVERY push, CodeRabbit will re-review and potentially add NEW comments
+    - **MUST REQUEST REVIEW**: After pushing changes, ALWAYS post `@coderabbitai review` to trigger review of the improvements
+    - **WAITING WITHOUT REQUESTING IS POINTLESS**: Don't just wait for rate limits to expire - actually request the review after waiting
     - Continue checking every minute for NEW CodeRabbit comments after each push
     - **USE POWERSHELL FOR WAITING**: Use `powershell -command "Start-Sleep -Seconds 60"` for non-interactive waits
     - **DO NOT assume review is complete** after addressing initial comments - wait for re-review
