@@ -48,6 +48,8 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - Look for specific line-by-line comments with actionable feedback
       - Ignore initial summary/walkthrough - this is NOT the review
       - CodeRabbit will provide specific suggestions, optimizations, or issues to address
+      - **NEVER MERGE while CodeRabbit shows "Currently processing new changes" or similar processing messages**
+      - **WAIT until CodeRabbit fully completes its review** - processing messages indicate incomplete review
     - Once CodeRabbit's ACTUAL review comments are detected, address ALL comments by making necessary code changes
     - Push changes to the feature branch
     - **CRITICAL**: After EVERY push, CodeRabbit will automatically re-review and potentially add NEW comments
@@ -59,6 +61,7 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
     - Repeat this automated cycle until CodeRabbit stops adding new substantive review comments
     - Only proceed to merge when CodeRabbit has completed its actual review AND has no more feedback
     - **DO NOT MERGE after just a summary** - wait for the complete review process
+    - **DO NOT MERGE while CodeRabbit is still processing** - wait for processing to complete fully
     - **DO NOT STOP**: This process should be fully automated without user intervention
 18. **Verify builds and tests**: Before merging, ensure all builds and tests pass
     - Run `go build ./...` to verify the entire project builds successfully
