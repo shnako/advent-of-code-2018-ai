@@ -75,7 +75,9 @@ Your puzzle answer was `8575`.
 
 The first half of this puzzle is complete! It provides one gold star: *
 
---- Part Two ---Okay, it's time to go rescue the man's friend.
+--- Part Two ---
+
+Okay, it's time to go rescue the man's friend.
 
 As you leave, he hands you some tools: a *torch* and some *climbing gear*. You can't equip both tools at once, but you can choose to use *neither*.
 
@@ -98,7 +100,7 @@ Finally, once you reach the target, you need the *torch* equipped before you can
 For example, using the same cave system as above, starting in the top left corner (`0,0`) and moving to the bottom right corner (the target, `10,10`) as quickly as possible, one possible route is as follows, with your current position marked `X`:
 
 ```
-`Initially:
+Initially:
 *X*=.|=.|.|=.|=|=.
 .|=|=|||..|.=...
 .==|....||=..|==
