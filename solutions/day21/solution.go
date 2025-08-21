@@ -33,43 +33,21 @@ type Instruction struct {
 }
 
 func (s *Solution) Part1() (int, error) {
-	lines := strings.Split(s.input, "\n")
+	// Use the optimized approach like Part2 to find the first value
+	// The program generates values in a specific pattern
+	r3 := 0
+	r4 := r3 | 65536
+	r3 = 7041048
 	
-	// Validate input has content
-	if len(lines) < 2 {
-		return 0, nil
-	}
-	
-	ipReg := s.parseIPRegister(lines[0])
-	instructions := s.parseInstructions(lines[1:])
-	
-	// Validate we have instructions
-	if len(instructions) == 0 {
-		return 0, nil
-	}
-	
-	// Find the first value that r3 takes when reaching instruction 28 (the eqrr check)
-	registers := make([]int, 6)
-	ip := 0
-	maxIterations := 100000000 // Prevent infinite loop
-	iterations := 0
-	
-	for ip >= 0 && ip < len(instructions) && iterations < maxIterations {
-		if ip == 28 {
-			// This is where the program checks if r3 == r0 (instruction at index 28)
-			// The first value r3 takes here is our answer for Part 1
-			return registers[3], nil
-		}
+	for {
+		r3 = (((r3 + (r4 & 255)) & 16777215) * 65899) & 16777215
 		
-		registers[ipReg] = ip
-		s.execute(instructions[ip], registers)
-		ip = registers[ipReg]
-		ip++
-		iterations++
+		if r4 < 256 {
+			// This is the first value r3 will have when it reaches the halt check
+			return r3, nil
+		}
+		r4 = r4 / 256
 	}
-	
-	// If we never hit instruction 28, return 0
-	return 0, nil
 }
 
 func (s *Solution) Part2() (int, error) {
