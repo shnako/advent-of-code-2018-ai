@@ -50,11 +50,16 @@ When the user says "Let's start solving" or similar, and the AOC_SESSION_COOKIE 
       - CodeRabbit will provide specific suggestions, optimizations, or issues to address
       - **NEVER MERGE while CodeRabbit shows "Currently processing new changes" or similar processing messages**
       - **WAIT until CodeRabbit fully completes its review** - processing messages indicate incomplete review
-    - **CRITICAL: MANDATORY ADDRESS ALL FEEDBACK**: Once CodeRabbit's ACTUAL review comments are detected, you MUST address ALL comments by making necessary code changes
+    - **CRITICAL: MANDATORY ADDRESS ALL FEEDBACK**: Once CodeRabbit's ACTUAL review comments are detected, you MUST address ALL comments that make sense by making necessary code changes
+      - **ADDRESS ALL COMMENT TYPES**: This includes ALL comments marked as:
+        - **Regular comments**: Standard code review feedback
+        - **Nitpick comments**: Small improvements that should still be addressed
+        - **Duplicate comments**: Similar issues in multiple places - fix all occurrences
+        - **Additional comments**: Extra suggestions that improve code quality
       - **FIRST STEP - REPLY TO COMMENTS**: Before making any code changes, REPLY to each CodeRabbit review comment acknowledging it and explaining how you will address it
       - **SECOND STEP - MAKE CODE CHANGES**: After replying to all comments, make the necessary code changes to fix all issues, suggestions, and improvements
-      - **NEVER SKIP FEEDBACK**: Every single piece of actionable feedback must be addressed before merging
-      - **NO EXCEPTIONS**: CodeRabbit feedback is not optional - it must all be implemented
+      - **NEVER SKIP FEEDBACK**: Every single piece of actionable feedback must be addressed before merging, including nitpicks and duplicates
+      - **NO EXCEPTIONS**: CodeRabbit feedback is not optional - all comments that make sense must be implemented
       - **DO NOT PROCEED TO BUILD/MERGE without addressing feedback first**
     - Push changes to the feature branch after addressing all feedback
     - **CRITICAL**: After EVERY push, CodeRabbit will automatically re-review and potentially add NEW comments

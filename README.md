@@ -30,7 +30,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 20  | [Day 20: A Regular Map](https://adventofcode.com/2018/day/20) | [solution.go](solutions/day20/solution.go) | [solution_test.go](solutions/day20/solution_test.go) | [input.txt](solutions/day20/input.txt) | [puzzle.txt](solutions/day20/puzzle.txt) |
 | 21  | [Day 21: Chronal Conversion](https://adventofcode.com/2018/day/21) | [solution.go](solutions/day21/solution.go) | [solution_test.go](solutions/day21/solution_test.go) | [input.txt](solutions/day21/input.txt) | [puzzle.txt](solutions/day21/puzzle.txt) |
 | 22  | [Day 22: Mode Maze](https://adventofcode.com/2018/day/22) | [solution.go](solutions/day22/solution.go) | [solution_test.go](solutions/day22/solution_test.go) | [input.txt](solutions/day22/input.txt) | [puzzle.txt](solutions/day22/puzzle.txt) |
-| 23  | [Day 23](https://adventofcode.com/2018/day/23) | - | - | - | - |
+| 23  | [Day 23: Experimental Emergency Teleportation](https://adventofcode.com/2018/day/23) | [solution.go](solutions/day23/solution.go) | [solution_test.go](solutions/day23/solution_test.go) | [input.txt](solutions/day23/input.txt) | [puzzle.txt](solutions/day23/puzzle.txt) |
 | 24  | [Day 24](https://adventofcode.com/2018/day/24) | - | - | - | - |
 | 25  | [Day 25](https://adventofcode.com/2018/day/25) | - | - | - | - |
 
