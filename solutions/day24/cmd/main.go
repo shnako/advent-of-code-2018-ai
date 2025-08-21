@@ -10,23 +10,28 @@ import (
 )
 
 func main() {
-	// Try to find input.txt in the parent directory first (when run from cmd/)
-	inputPath := "../input.txt"
-	if _, err := os.Stat(inputPath); os.IsNotExist(err) {
-		// Try current directory (when run from solutions/day24/)
-		inputPath = "input.txt"
+	// Search common locations to support `go run ./solutions/day24/cmd` and running the built binary.
+	exePath, _ := os.Executable()
+	candidates := []string{
+		"input.txt",                         // solutions/day24/
+		"solutions/day24/input.txt",         // repo root
+		"../input.txt",                      // when cwd is solutions/day24/cmd
+		filepath.Join(filepath.Dir(exePath), "input.txt"),
+		filepath.Join(filepath.Dir(exePath), "..", "input.txt"),
 	}
-
-	data, err := os.ReadFile(inputPath)
-	if err != nil {
-		// Try to find it relative to the executable
-		exePath, _ := os.Executable()
-		inputPath = filepath.Join(filepath.Dir(exePath), "..", "input.txt")
-		data, err = os.ReadFile(inputPath)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading input.txt: %v\n", err)
-			os.Exit(1)
+	var data []byte
+	var err error
+	for _, p := range candidates {
+		if b, e := os.ReadFile(p); e == nil {
+			data, err = b, nil
+			break
+		} else {
+			err = e
 		}
+	}
+	if data == nil {
+		fmt.Fprintf(os.Stderr, "Error reading input.txt: %v\n", err)
+		os.Exit(1)
 	}
 
 	input := strings.TrimSpace(string(data))

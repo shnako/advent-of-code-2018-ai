@@ -29,8 +29,11 @@ func TestPart1(t *testing.T) {
 	}
 	input := strings.TrimSpace(string(data))
 	
-	result := Part1(input)
-	t.Logf("Part 1 Result: %s", result)
+	got := Part1(input)
+	want := "19974"
+	if got != want {
+		t.Fatalf("Part1(input.txt) = %s; want %s", got, want)
+	}
 }
 
 func TestPart2Example(t *testing.T) {
@@ -56,6 +59,9 @@ func TestPart2(t *testing.T) {
 	}
 	input := strings.TrimSpace(string(data))
 	
-	result := Part2(input)
-	t.Logf("Part 2 Result: %s", result)
+	got := Part2(input)
+	want := "4606"
+	if got != want {
+		t.Fatalf("Part2(input.txt) = %s; want %s", got, want)
+	}
 }
