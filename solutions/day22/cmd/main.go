@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -9,9 +10,30 @@ import (
 )
 
 func main() {
-	input, err := os.ReadFile("../input.txt")
+	var inputPath string
+	flag.StringVar(&inputPath, "input", "", "path to input.txt (default: auto-detect)")
+	flag.Parse()
+
+	candidates := []string{}
+	if inputPath != "" {
+		candidates = []string{inputPath}
+	} else {
+		// Try common run modes: from day dir, from cmd dir, from repo root
+		candidates = []string{"input.txt", "../input.txt", "solutions/day22/input.txt"}
+	}
+
+	var input []byte
+	var err error
+	for _, p := range candidates {
+		if b, e := os.ReadFile(p); e == nil {
+			input, err = b, nil
+			break
+		} else {
+			err = e
+		}
+	}
 	if err != nil {
-		log.Fatalf("Failed to read input: %v", err)
+		log.Fatalf("Failed to read input. Tried: %v. Last error: %v", candidates, err)
 	}
 
 	solution := day22.New(string(input))

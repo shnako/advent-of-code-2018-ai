@@ -19,6 +19,31 @@ import (
 	"strings"
 )
 
+// Region types
+const (
+	rocky  = 0
+	wet    = 1
+	narrow = 2
+)
+
+// Tools
+const (
+	neither = 0
+	torch   = 1
+	gear    = 2
+)
+
+// Costs
+const (
+	moveCost   = 1
+	switchCost = 7
+)
+
+// Search parameters
+const (
+	searchMargin = 50
+)
+
 type Solution struct {
 	input string
 }
@@ -67,8 +92,7 @@ func (s *Solution) Part1() (int, error) {
 		return 0, err
 	}
 
-	// Cache for geologic indices and erosion levels
-	geologicIndex := make(map[string]int)
+	// Cache for erosion levels
 	erosionLevel := make(map[string]int)
 
 	// Calculate erosion level for a given coordinate
@@ -93,7 +117,6 @@ func (s *Solution) Part1() (int, error) {
 			geoIndex = leftErosion * topErosion
 		}
 
-		geologicIndex[key] = geoIndex
 		level := (geoIndex + depth) % 20183
 		erosionLevel[key] = level
 		return level
@@ -150,20 +173,18 @@ func (s *Solution) Part2() (int, error) {
 		return getErosionLevel(x, y) % 3
 	}
 
-	// Tools: 0=neither, 1=torch, 2=climbing gear
-	// Region types: 0=rocky, 1=wet, 2=narrow
 	// Valid tools per region type:
-	// Rocky (0): climbing gear (2) or torch (1)
-	// Wet (1): climbing gear (2) or neither (0)
-	// Narrow (2): torch (1) or neither (0)
+	// Rocky: climbing gear or torch
+	// Wet: climbing gear or neither
+	// Narrow: torch or neither
 	isValidTool := func(regionType, tool int) bool {
 		switch regionType {
-		case 0: // rocky
-			return tool == 1 || tool == 2
-		case 1: // wet
-			return tool == 0 || tool == 2
-		case 2: // narrow
-			return tool == 0 || tool == 1
+		case rocky:
+			return tool == torch || tool == gear
+		case wet:
+			return tool == neither || tool == gear
+		case narrow:
+			return tool == neither || tool == torch
 		}
 		return false
 	}
@@ -173,11 +194,12 @@ func (s *Solution) Part2() (int, error) {
 	heap.Init(&pq)
 
 	// Start at 0,0 with torch equipped
-	start := &state{x: 0, y: 0, tool: 1, time: 0}
+	start := &state{x: 0, y: 0, tool: torch, time: 0}
 	heap.Push(&pq, start)
 
-	// Track visited states
+	// Track visited states and best-known times
 	visited := make(map[string]bool)
+	best := make(map[string]int)
 
 	// Directions: up, down, left, right
 	dx := []int{0, 0, -1, 1}
@@ -195,7 +217,7 @@ func (s *Solution) Part2() (int, error) {
 		visited[stateKey] = true
 
 		// Check if we reached the target with torch equipped
-		if current.x == targetX && current.y == targetY && current.tool == 1 {
+		if current.x == targetX && current.y == targetY && current.tool == torch {
 			return current.time, nil
 		}
 
@@ -209,7 +231,7 @@ func (s *Solution) Part2() (int, error) {
 			}
 
 			// Don't explore too far from target
-			if nx > targetX+50 || ny > targetY+50 {
+			if nx > targetX+searchMargin || ny > targetY+searchMargin {
 				continue
 			}
 
@@ -217,28 +239,26 @@ func (s *Solution) Part2() (int, error) {
 			if isValidTool(nextRegionType, current.tool) {
 				nextStateKey := fmt.Sprintf("%d,%d,%d", nx, ny, current.tool)
 				if !visited[nextStateKey] {
-					heap.Push(&pq, &state{
-						x:    nx,
-						y:    ny,
-						tool: current.tool,
-						time: current.time + 1,
-					})
+					nt := current.time + moveCost
+					if bt, ok := best[nextStateKey]; !ok || nt < bt {
+						best[nextStateKey] = nt
+						heap.Push(&pq, &state{x: nx, y: ny, tool: current.tool, time: nt})
+					}
 				}
 			}
 		}
 
 		// Try switching tools at current position
 		currentRegionType := getRegionType(current.x, current.y)
-		for newTool := 0; newTool <= 2; newTool++ {
+		for newTool := neither; newTool <= gear; newTool++ {
 			if newTool != current.tool && isValidTool(currentRegionType, newTool) {
 				nextStateKey := fmt.Sprintf("%d,%d,%d", current.x, current.y, newTool)
 				if !visited[nextStateKey] {
-					heap.Push(&pq, &state{
-						x:    current.x,
-						y:    current.y,
-						tool: newTool,
-						time: current.time + 7,
-					})
+					nt := current.time + switchCost
+					if bt, ok := best[nextStateKey]; !ok || nt < bt {
+						best[nextStateKey] = nt
+						heap.Push(&pq, &state{x: current.x, y: current.y, tool: newTool, time: nt})
+					}
 				}
 			}
 		}
@@ -269,15 +289,15 @@ func (s *Solution) parseInput() (depth, targetX, targetY int, err error) {
 		return 0, 0, 0, fmt.Errorf("invalid target line: %s", targetLine)
 	}
 	targetStr := strings.TrimPrefix(targetLine, "target: ")
-	coords := strings.Split(targetStr, ",")
+	coords := strings.SplitN(targetStr, ",", 2)
 	if len(coords) != 2 {
 		return 0, 0, 0, fmt.Errorf("invalid target coordinates: %s", targetStr)
 	}
-	targetX, err = strconv.Atoi(coords[0])
+	targetX, err = strconv.Atoi(strings.TrimSpace(coords[0]))
 	if err != nil {
 		return 0, 0, 0, fmt.Errorf("invalid target X: %v", err)
 	}
-	targetY, err = strconv.Atoi(coords[1])
+	targetY, err = strconv.Atoi(strings.TrimSpace(coords[1]))
 	if err != nil {
 		return 0, 0, 0, fmt.Errorf("invalid target Y: %v", err)
 	}

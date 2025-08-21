@@ -13,8 +13,7 @@ target: 10,10`
 	result, err := solution.Part1()
 
 	if err != nil {
-		t.Errorf("Part1() error = %v", err)
-		return
+		t.Fatalf("Part1() error = %v", err)
 	}
 
 	expected := 114
@@ -31,8 +30,7 @@ target: 10,10`
 	result, err := solution.Part2()
 
 	if err != nil {
-		t.Errorf("Part2() error = %v", err)
-		return
+		t.Fatalf("Part2() error = %v", err)
 	}
 
 	expected := 45
@@ -51,8 +49,7 @@ func TestPart1(t *testing.T) {
 	result, err := solution.Part1()
 
 	if err != nil {
-		t.Errorf("Part1() error = %v", err)
-		return
+		t.Fatalf("Part1() error = %v", err)
 	}
 
 	expected := 8575
@@ -71,8 +68,7 @@ func TestPart2(t *testing.T) {
 	result, err := solution.Part2()
 
 	if err != nil {
-		t.Errorf("Part2() error = %v", err)
-		return
+		t.Fatalf("Part2() error = %v", err)
 	}
 
 	expected := 999
