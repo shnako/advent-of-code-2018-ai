@@ -90,11 +90,6 @@ type Box struct {
 	size    int
 }
 
-func (b Box) contains(x, y, z int) bool {
-	return x >= b.x && x < b.x+b.size &&
-		y >= b.y && y < b.y+b.size &&
-		z >= b.z && z < b.z+b.size
-}
 
 func distanceToBox(bot Nanobot, box Box) int {
 	dist := 0
