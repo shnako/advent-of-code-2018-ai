@@ -29,7 +29,7 @@ This repository contains solutions for the [Advent of Code 2018](https://advento
 | 19  | [Day 19: Go With The Flow](https://adventofcode.com/2018/day/19) | [solution.go](solutions/day19/solution.go) | [solution_test.go](solutions/day19/solution_test.go) | [input.txt](solutions/day19/input.txt) | [puzzle.txt](solutions/day19/puzzle.txt) |
 | 20  | [Day 20: A Regular Map](https://adventofcode.com/2018/day/20) | [solution.go](solutions/day20/solution.go) | [solution_test.go](solutions/day20/solution_test.go) | [input.txt](solutions/day20/input.txt) | [puzzle.txt](solutions/day20/puzzle.txt) |
 | 21  | [Day 21: Chronal Conversion](https://adventofcode.com/2018/day/21) | [solution.go](solutions/day21/solution.go) | [solution_test.go](solutions/day21/solution_test.go) | [input.txt](solutions/day21/input.txt) | [puzzle.txt](solutions/day21/puzzle.txt) |
-| 22  | [Day 22](https://adventofcode.com/2018/day/22) | - | - | - | - |
+| 22  | [Day 22: Mode Maze](https://adventofcode.com/2018/day/22) | [solution.go](solutions/day22/solution.go) | [solution_test.go](solutions/day22/solution_test.go) | [input.txt](solutions/day22/input.txt) | [puzzle.txt](solutions/day22/puzzle.txt) |
 | 23  | [Day 23](https://adventofcode.com/2018/day/23) | - | - | - | - |
 | 24  | [Day 24](https://adventofcode.com/2018/day/24) | - | - | - | - |
 | 25  | [Day 25](https://adventofcode.com/2018/day/25) | - | - | - | - |
