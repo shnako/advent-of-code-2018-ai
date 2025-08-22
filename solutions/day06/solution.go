@@ -16,27 +16,32 @@ package day06
 import (
 	"strconv"
 	"strings"
+
+	"github.com/shnako/advent-of-code-2018-ai/internal/utils"
 )
 
-type Point struct {
-	X, Y int
-}
 
 type Solution struct {
-	coordinates []Point
+	coordinates []utils.Point
 }
 
 func New(input string) *Solution {
 	// Handle both Unix (\n) and Windows (\r\n) line endings
 	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
 	lines := strings.Split(input, "\n")
-	coordinates := make([]Point, 0, len(lines))
+	coordinates := make([]utils.Point, 0, len(lines))
 
 	for _, line := range lines {
 		parts := strings.Split(line, ", ")
-		x, _ := strconv.Atoi(parts[0])
-		y, _ := strconv.Atoi(parts[1])
-		coordinates = append(coordinates, Point{X: x, Y: y})
+		x, err := strconv.Atoi(parts[0])
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
+		y, err := strconv.Atoi(parts[1])
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
+		coordinates = append(coordinates, utils.Point{X: x, Y: y})
 	}
 
 	return &Solution{coordinates: coordinates}
@@ -71,7 +76,7 @@ func (s *Solution) Part1() (int, error) {
 	// Check each point in the grid
 	for x := minX; x <= maxX; x++ {
 		for y := minY; y <= maxY; y++ {
-			closest := s.findClosestCoordinate(Point{X: x, Y: y})
+			closest := s.findClosestCoordinate(utils.Point{X: x, Y: y})
 			if closest != -1 {
 				areas[closest]++
 
@@ -132,7 +137,7 @@ func (s *Solution) countRegionSize(maxDistance int) int {
 	for x := minX; x <= maxX; x++ {
 		for y := minY; y <= maxY; y++ {
 			totalDistance := 0
-			point := Point{X: x, Y: y}
+			point := utils.Point{X: x, Y: y}
 
 			// Calculate sum of distances to all coordinates
 			for _, coord := range s.coordinates {
@@ -150,7 +155,7 @@ func (s *Solution) countRegionSize(maxDistance int) int {
 
 // findClosestCoordinate returns the index of the closest coordinate to the given point
 // Returns -1 if there's a tie (multiple coordinates at the same minimum distance)
-func (s *Solution) findClosestCoordinate(point Point) int {
+func (s *Solution) findClosestCoordinate(point utils.Point) int {
 	minDistance := -1
 	closestIndex := -1
 	tied := false
@@ -175,14 +180,7 @@ func (s *Solution) findClosestCoordinate(point Point) int {
 }
 
 // manhattanDistance calculates the Manhattan distance between two points
-func manhattanDistance(a, b Point) int {
-	return abs(a.X-b.X) + abs(a.Y-b.Y)
+func manhattanDistance(a, b utils.Point) int {
+	return utils.Abs(a.X-b.X) + utils.Abs(a.Y-b.Y)
 }
 
-// abs returns the absolute value of an integer
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}

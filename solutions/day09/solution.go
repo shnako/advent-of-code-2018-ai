@@ -33,8 +33,14 @@ func New(input string) *Solution {
 	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
 	parts := strings.Fields(input)
 
-	players, _ := strconv.Atoi(parts[0])
-	lastMarble, _ := strconv.Atoi(parts[6])
+	players, err := strconv.Atoi(parts[0])
+	if err != nil {
+		players = 0 // Default value if parsing fails
+	}
+	lastMarble, err := strconv.Atoi(parts[6])
+	if err != nil {
+		lastMarble = 0 // Default value if parsing fails
+	}
 
 	return &Solution{
 		players:    players,

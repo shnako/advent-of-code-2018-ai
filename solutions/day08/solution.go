@@ -32,7 +32,11 @@ func New(input string) *Solution {
 
 	numbers := make([]int, len(fields))
 	for i, field := range fields {
-		num, _ := strconv.Atoi(field)
+		num, err := strconv.Atoi(field)
+		if err != nil {
+			// Skip invalid numbers - this shouldn't happen with valid puzzle input
+			continue
+		}
 		numbers[i] = num
 	}
 

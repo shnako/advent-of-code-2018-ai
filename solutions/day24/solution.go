@@ -73,11 +73,23 @@ func parseInput(input string) []*Group {
 			continue
 		}
 		
-		units, _ := strconv.Atoi(matches[1])
-		hp, _ := strconv.Atoi(matches[2])
-		damage, _ := strconv.Atoi(matches[4])
+		units, err := strconv.Atoi(matches[1])
+		if err != nil {
+			continue // Skip invalid group lines
+		}
+		hp, err := strconv.Atoi(matches[2])
+		if err != nil {
+			continue // Skip invalid group lines
+		}
+		damage, err := strconv.Atoi(matches[4])
+		if err != nil {
+			continue // Skip invalid group lines
+		}
 		damageType := matches[5]
-		initiative, _ := strconv.Atoi(matches[6])
+		initiative, err := strconv.Atoi(matches[6])
+		if err != nil {
+			continue // Skip invalid group lines
+		}
 		
 		group := &Group{
 			army:       currentArmy,

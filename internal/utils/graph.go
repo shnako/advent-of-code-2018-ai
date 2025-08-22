@@ -2,13 +2,14 @@ package utils
 
 import "container/heap"
 
-// PriorityQueue implements heap.Interface for A* and Dijkstra
+// Item represents a priority queue item with a value, priority, and index.
 type Item struct {
 	Value    interface{}
 	Priority int
 	Index    int
 }
 
+// PriorityQueue implements heap.Interface for priority-based algorithms.
 type PriorityQueue []*Item
 
 func (pq PriorityQueue) Len() int { return len(pq) }
@@ -40,7 +41,8 @@ func (pq *PriorityQueue) Pop() interface{} {
 	return item
 }
 
-// BFS performs breadth-first search
+// BFS performs breadth-first search from start point to find target.
+// Returns the path and whether a path was found.
 func BFS(start Point, isTarget func(Point) bool, getNeighbors func(Point) []Point) ([]Point, bool) {
 	queue := []Point{start}
 	visited := make(map[Point]bool)
@@ -74,7 +76,8 @@ func BFS(start Point, isTarget func(Point) bool, getNeighbors func(Point) []Poin
 	return nil, false
 }
 
-// DFS performs depth-first search
+// DFS performs depth-first search from start point to find target.
+// Returns whether the target was found.
 func DFS(start Point, isTarget func(Point) bool, getNeighbors func(Point) []Point) bool {
 	visited := make(map[Point]bool)
 
@@ -100,7 +103,8 @@ func DFS(start Point, isTarget func(Point) bool, getNeighbors func(Point) []Poin
 	return dfsHelper(start)
 }
 
-// Dijkstra finds shortest path using Dijkstra's algorithm
+// Dijkstra finds the shortest path using Dijkstra's algorithm.
+// Returns the cost and path to the target, or -1 and nil if no path exists.
 func Dijkstra(start Point, isTarget func(Point) bool, getNeighbors func(Point) []PointWithCost) (int, []Point) {
 	pq := make(PriorityQueue, 0)
 	heap.Init(&pq)
@@ -143,12 +147,14 @@ func Dijkstra(start Point, isTarget func(Point) bool, getNeighbors func(Point) [
 	return -1, nil
 }
 
+// PointWithCost represents a point with an associated movement cost.
 type PointWithCost struct {
 	Point Point
 	Cost  int
 }
 
-// TopologicalSort performs topological sorting on a DAG
+// TopologicalSort performs topological sorting on a directed acyclic graph.
+// Returns the sorted nodes and whether the graph is acyclic.
 func TopologicalSort(nodes []string, edges map[string][]string) ([]string, bool) {
 	inDegree := make(map[string]int)
 	for _, node := range nodes {
@@ -186,7 +192,8 @@ func TopologicalSort(nodes []string, edges map[string][]string) ([]string, bool)
 	return result, len(result) == len(nodes)
 }
 
-// FloodFill performs flood fill from a starting point
+// FloodFill performs flood fill from a starting point with the given value.
+// Returns the number of cells filled.
 func FloodFill(grid *Grid, start Point, fillValue rune) int {
 	if !grid.InBounds(start) {
 		return 0

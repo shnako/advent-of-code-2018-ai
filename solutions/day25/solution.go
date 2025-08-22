@@ -4,21 +4,17 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/shnako/advent-of-code-2018-ai/internal/utils"
 )
 
 type Point struct {
 	x, y, z, t int
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
 
 func manhattanDistance(p1, p2 Point) int {
-	return abs(p1.x-p2.x) + abs(p1.y-p2.y) + abs(p1.z-p2.z) + abs(p1.t-p2.t)
+	return utils.Abs(p1.x-p2.x) + utils.Abs(p1.y-p2.y) + utils.Abs(p1.z-p2.z) + utils.Abs(p1.t-p2.t)
 }
 
 type UnionFind struct {
@@ -84,10 +80,22 @@ func parseInput(input string) []Point {
 			continue
 		}
 		
-		x, _ := strconv.Atoi(strings.TrimSpace(parts[0]))
-		y, _ := strconv.Atoi(strings.TrimSpace(parts[1]))
-		z, _ := strconv.Atoi(strings.TrimSpace(parts[2]))
-		t, _ := strconv.Atoi(strings.TrimSpace(parts[3]))
+		x, err := strconv.Atoi(strings.TrimSpace(parts[0]))
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
+		y, err := strconv.Atoi(strings.TrimSpace(parts[1]))
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
+		z, err := strconv.Atoi(strings.TrimSpace(parts[2]))
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
+		t, err := strconv.Atoi(strings.TrimSpace(parts[3]))
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
 		
 		points = append(points, Point{x, y, z, t})
 	}

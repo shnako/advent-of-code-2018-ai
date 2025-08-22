@@ -103,17 +103,29 @@ func (s *Solution) parseInput() error {
 		}
 
 		// Parse X range
-		x1, _ := strconv.Atoi(xMatch[1])
+		x1, err := strconv.Atoi(xMatch[1])
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
 		x2 := x1
 		if len(xMatch) > 2 && xMatch[2] != "" {
-			x2, _ = strconv.Atoi(xMatch[2])
+			x2, err = strconv.Atoi(xMatch[2])
+			if err != nil {
+				continue // Skip invalid coordinate lines
+			}
 		}
 
 		// Parse Y range
-		y1, _ := strconv.Atoi(yMatch[1])
+		y1, err := strconv.Atoi(yMatch[1])
+		if err != nil {
+			continue // Skip invalid coordinate lines
+		}
 		y2 := y1
 		if len(yMatch) > 2 && yMatch[2] != "" {
-			y2, _ = strconv.Atoi(yMatch[2])
+			y2, err = strconv.Atoi(yMatch[2])
+			if err != nil {
+				continue // Skip invalid coordinate lines
+			}
 		}
 
 		// Add clay tiles

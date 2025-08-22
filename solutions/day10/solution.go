@@ -36,10 +36,22 @@ func New(input string) *Solution {
 	for _, line := range lines {
 		matches := re.FindStringSubmatch(line)
 		if len(matches) == 5 {
-			x, _ := strconv.Atoi(matches[1])
-			y, _ := strconv.Atoi(matches[2])
-			vx, _ := strconv.Atoi(matches[3])
-			vy, _ := strconv.Atoi(matches[4])
+			x, err := strconv.Atoi(matches[1])
+			if err != nil {
+				continue // Skip invalid point lines
+			}
+			y, err := strconv.Atoi(matches[2])
+			if err != nil {
+				continue // Skip invalid point lines
+			}
+			vx, err := strconv.Atoi(matches[3])
+			if err != nil {
+				continue // Skip invalid point lines
+			}
+			vy, err := strconv.Atoi(matches[4])
+			if err != nil {
+				continue // Skip invalid point lines
+			}
 			points = append(points, Point{x, y, vx, vy})
 		}
 	}
