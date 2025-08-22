@@ -13,6 +13,7 @@
 package day09
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -33,8 +34,26 @@ func New(input string) *Solution {
 	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
 	parts := strings.Fields(input)
 
-	players, _ := strconv.Atoi(parts[0])
-	lastMarble, _ := strconv.Atoi(parts[6])
+	if len(parts) < 7 {
+		// Malformed input; return empty solution to be caught by Part1/Part2 validation
+		return &Solution{}
+	}
+
+	players, err := strconv.Atoi(parts[0])
+	if err != nil {
+		// Invalid input; return empty solution
+		return &Solution{}
+	}
+	lastMarble, err := strconv.Atoi(parts[6])
+	if err != nil {
+		// Invalid input; return empty solution
+		return &Solution{}
+	}
+
+	// Reject non-positive values early
+	if players <= 0 || lastMarble <= 0 {
+		return &Solution{}
+	}
 
 	return &Solution{
 		players:    players,
@@ -43,10 +62,16 @@ func New(input string) *Solution {
 }
 
 func (s *Solution) Part1() (int, error) {
+	if s.players <= 0 || s.lastMarble <= 0 {
+		return 0, fmt.Errorf("invalid input: players=%d, lastMarble=%d must be positive", s.players, s.lastMarble)
+	}
 	return s.playGame(s.lastMarble), nil
 }
 
 func (s *Solution) Part2() (int, error) {
+	if s.players <= 0 || s.lastMarble <= 0 {
+		return 0, fmt.Errorf("invalid input: players=%d, lastMarble=%d must be positive", s.players, s.lastMarble)
+	}
 	return s.playGame(s.lastMarble * 100), nil
 }
 

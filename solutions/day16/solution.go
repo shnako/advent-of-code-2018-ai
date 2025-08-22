@@ -12,6 +12,7 @@
 package day16
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -55,11 +56,17 @@ func (s *Solution) Part2() (int, error) {
 
 	// Determine which opcode number corresponds to which operation
 	opcodeMapping := s.deduceOpcodes(samples)
+	if len(opcodeMapping) != 16 {
+		return 0, fmt.Errorf("incomplete opcode mapping: decoded %d/16 opcodes", len(opcodeMapping))
+	}
 
 	// Execute the test program
 	registers := [4]int{0, 0, 0, 0}
 	for _, instruction := range program {
-		opcode := opcodeMapping[instruction[0]]
+		opcode, ok := opcodeMapping[instruction[0]]
+		if !ok {
+			return 0, fmt.Errorf("no mapping for opcode %d", instruction[0])
+		}
 		s.executeOpcode(opcode, instruction[1], instruction[2], instruction[3], &registers)
 	}
 
@@ -94,22 +101,49 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 		beforeStr := strings.TrimPrefix(sampleLines[i], "Before: [")
 		beforeStr = strings.TrimSuffix(beforeStr, "]")
 		beforeParts := strings.Split(beforeStr, ", ")
+		validBefore := true
 		for j, part := range beforeParts {
-			sample.Before[j], _ = strconv.Atoi(strings.TrimSpace(part))
+			val, err := strconv.Atoi(strings.TrimSpace(part))
+			if err != nil {
+				validBefore = false
+				break
+			}
+			sample.Before[j] = val
+		}
+		if !validBefore {
+			continue // Skip invalid sample
 		}
 
 		// Parse instruction line: "9 3 3 2"
 		instParts := strings.Fields(sampleLines[i+1])
+		validInst := true
 		for j, part := range instParts {
-			sample.Instruction[j], _ = strconv.Atoi(part)
+			val, err := strconv.Atoi(part)
+			if err != nil {
+				validInst = false
+				break
+			}
+			sample.Instruction[j] = val
+		}
+		if !validInst {
+			continue // Skip invalid sample
 		}
 
 		// Parse After line: "After:  [3, 1, 0, 1]"
 		afterStr := strings.TrimPrefix(sampleLines[i+2], "After:  [")
 		afterStr = strings.TrimSuffix(afterStr, "]")
 		afterParts := strings.Split(afterStr, ", ")
+		validAfter := true
 		for j, part := range afterParts {
-			sample.After[j], _ = strconv.Atoi(strings.TrimSpace(part))
+			val, err := strconv.Atoi(strings.TrimSpace(part))
+			if err != nil {
+				validAfter = false
+				break
+			}
+			sample.After[j] = val
+		}
+		if !validAfter {
+			continue // Skip invalid sample
 		}
 
 		samples = append(samples, sample)
@@ -127,10 +161,18 @@ func (s *Solution) parseInput() ([]Sample, [][4]int, error) {
 			parts := strings.Fields(line)
 			if len(parts) == 4 {
 				instruction := [4]int{}
+				valid := true
 				for i, part := range parts {
-					instruction[i], _ = strconv.Atoi(part)
+					val, err := strconv.Atoi(part)
+					if err != nil {
+						valid = false
+						break
+					}
+					instruction[i] = val
 				}
-				program = append(program, instruction)
+				if valid {
+					program = append(program, instruction)
+				}
 			}
 		}
 	}

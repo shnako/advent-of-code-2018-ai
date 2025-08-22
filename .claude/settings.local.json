@@ -41,7 +41,9 @@
       "WebSearch",
       "WebFetch(domain:todd.ginsberg.com)",
       "WebFetch(domain:www.michaelfogleman.com)",
-      "Bash(gh pr checks:*)"
+      "Bash(gh pr checks:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh workflow:*)"
     ],
     "deny": [],
     "ask": []

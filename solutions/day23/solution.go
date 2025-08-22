@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/shnako/advent-of-code-2018-ai/internal/utils"
 )
 
 type Nanobot struct {
@@ -22,10 +24,22 @@ func ParseInput(input string) []Nanobot {
 	for _, line := range lines {
 		matches := re.FindStringSubmatch(line)
 		if len(matches) == 5 {
-			x, _ := strconv.Atoi(matches[1])
-			y, _ := strconv.Atoi(matches[2])
-			z, _ := strconv.Atoi(matches[3])
-			r, _ := strconv.Atoi(matches[4])
+			x, err := strconv.Atoi(matches[1])
+			if err != nil {
+				continue // Skip invalid nanobot lines
+			}
+			y, err := strconv.Atoi(matches[2])
+			if err != nil {
+				continue // Skip invalid nanobot lines
+			}
+			z, err := strconv.Atoi(matches[3])
+			if err != nil {
+				continue // Skip invalid nanobot lines
+			}
+			r, err := strconv.Atoi(matches[4])
+			if err != nil {
+				continue // Skip invalid nanobot lines
+			}
 			nanobots = append(nanobots, Nanobot{x, y, z, r})
 		}
 	}
@@ -33,15 +47,9 @@ func ParseInput(input string) []Nanobot {
 	return nanobots
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
 
 func manhattanDistance(n1, n2 Nanobot) int {
-	return abs(n1.x-n2.x) + abs(n1.y-n2.y) + abs(n1.z-n2.z)
+	return utils.Abs(n1.x-n2.x) + utils.Abs(n1.y-n2.y) + utils.Abs(n1.z-n2.z)
 }
 
 func Part1(input string) (string, error) {
@@ -71,19 +79,7 @@ func Part1(input string) (string, error) {
 	return strconv.Itoa(count), nil
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
 
 type Box struct {
 	x, y, z int
@@ -180,8 +176,8 @@ func Part2(input string) (string, error) {
 	maxCoord := nanobots[0].x
 	
 	for _, bot := range nanobots {
-		minCoord = min(minCoord, min(bot.x, min(bot.y, bot.z)))
-		maxCoord = max(maxCoord, max(bot.x, max(bot.y, bot.z)))
+		minCoord = utils.Min(minCoord, utils.Min(bot.x, utils.Min(bot.y, bot.z)))
+		maxCoord = utils.Max(maxCoord, utils.Max(bot.x, utils.Max(bot.y, bot.z)))
 	}
 	
 	boxSize := 1
@@ -194,7 +190,7 @@ func Part2(input string) (string, error) {
 	
 	initialBox := Box{minCoord, minCoord, minCoord, boxSize}
 	initialCount := countBotsInRangeOfBox(initialBox, nanobots)
-	initialDist := abs(minCoord) + abs(minCoord) + abs(minCoord)
+	initialDist := utils.Abs(minCoord) + utils.Abs(minCoord) + utils.Abs(minCoord)
 	heap.Push(&pq, &Item{initialBox, initialCount, initialDist, 0})
 	
 	for pq.Len() > 0 {
@@ -220,7 +216,7 @@ func Part2(input string) (string, error) {
 					}
 					
 					count := countBotsInRangeOfBox(newBox, nanobots)
-					dist := abs(newBox.x) + abs(newBox.y) + abs(newBox.z)
+					dist := utils.Abs(newBox.x) + utils.Abs(newBox.y) + utils.Abs(newBox.z)
 					
 					heap.Push(&pq, &Item{newBox, count, dist, 0})
 				}

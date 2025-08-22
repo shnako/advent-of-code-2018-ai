@@ -83,7 +83,10 @@ func (s *Solution) Part2() (int, error) {
 
 func (s *Solution) parseIPRegister(line string) int {
 	parts := strings.Split(line, " ")
-	ip, _ := strconv.Atoi(parts[1])
+	ip, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return 0 // Default to register 0 if parsing fails
+	}
 	return ip
 }
 
@@ -94,9 +97,18 @@ func (s *Solution) parseInstructions(lines []string) []Instruction {
 			continue
 		}
 		parts := strings.Split(line, " ")
-		a, _ := strconv.Atoi(parts[1])
-		b, _ := strconv.Atoi(parts[2])
-		c, _ := strconv.Atoi(parts[3])
+		a, err := strconv.Atoi(parts[1])
+		if err != nil {
+			continue // Skip invalid instruction lines
+		}
+		b, err := strconv.Atoi(parts[2])
+		if err != nil {
+			continue // Skip invalid instruction lines
+		}
+		c, err := strconv.Atoi(parts[3])
+		if err != nil {
+			continue // Skip invalid instruction lines
+		}
 		instructions = append(instructions, Instruction{
 			op: parts[0],
 			a:  a,

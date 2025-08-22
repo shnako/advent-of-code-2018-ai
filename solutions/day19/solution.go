@@ -47,9 +47,18 @@ func (s *Solution) parseInput() (int, []Instruction) {
 		if len(parts) != 4 {
 			continue
 		}
-		a, _ := strconv.Atoi(parts[1])
-		b, _ := strconv.Atoi(parts[2])
-		c, _ := strconv.Atoi(parts[3])
+		a, err := strconv.Atoi(parts[1])
+		if err != nil {
+			continue // Skip invalid instruction lines
+		}
+		b, err := strconv.Atoi(parts[2])
+		if err != nil {
+			continue // Skip invalid instruction lines
+		}
+		c, err := strconv.Atoi(parts[3])
+		if err != nil {
+			continue // Skip invalid instruction lines
+		}
 		instructions = append(instructions, Instruction{
 			opcode: parts[0],
 			a: a,

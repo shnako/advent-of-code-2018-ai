@@ -4,16 +4,37 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 	"github.com/shnako/advent-of-code-2018-ai/solutions/day21"
 )
 
 func main() {
-	input, err := os.ReadFile("../input.txt")
-	if err != nil {
+	// Search common locations to support `go run ./solutions/day21/cmd` and running the built binary.
+	exePath, _ := os.Executable()
+	candidates := []string{
+		"input.txt",                         // solutions/day21/
+		"solutions/day21/input.txt",         // repo root
+		"../input.txt",                      // when cwd is solutions/day21/cmd
+		filepath.Join(filepath.Dir(exePath), "input.txt"),
+		filepath.Join(filepath.Dir(exePath), "..", "input.txt"),
+	}
+	var data []byte
+	var err error
+	for _, p := range candidates {
+		if b, e := os.ReadFile(p); e == nil {
+			data, err = b, nil
+			break
+		} else {
+			err = e
+		}
+	}
+	if data == nil {
 		log.Fatalf("Failed to read input: %v", err)
 	}
-	
-	solution := day21.New(string(input))
+
+	input := strings.TrimSpace(string(data))
+	solution := day21.New(input)
 	
 	part1, err := solution.Part1()
 	if err != nil {

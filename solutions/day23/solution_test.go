@@ -38,7 +38,10 @@ func TestPart1(t *testing.T) {
 		t.Fatalf("Part1 failed: %v", err)
 	}
 
-	t.Logf("Part1 Result: %s", result)
+	expected := "704"
+	if result != expected {
+		t.Errorf("Part1() = %s, want %s", result, expected)
+	}
 }
 
 func TestPart2Example(t *testing.T) {
@@ -71,5 +74,8 @@ func TestPart2(t *testing.T) {
 		t.Fatalf("Part2 failed: %v", err)
 	}
 
-	t.Logf("Part2 Result: %s", result)
+	expected := "111960222"
+	if result != expected {
+		t.Errorf("Part2() = %s, want %s", result, expected)
+	}
 }
