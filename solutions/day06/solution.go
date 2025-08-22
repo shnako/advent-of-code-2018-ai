@@ -32,12 +32,21 @@ func New(input string) *Solution {
 	coordinates := make([]utils.Point, 0, len(lines))
 
 	for _, line := range lines {
-		parts := strings.Split(line, ", ")
-		x, err := strconv.Atoi(parts[0])
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue // Skip empty lines
+		}
+		
+		parts := strings.SplitN(line, ", ", 2)
+		if len(parts) != 2 {
+			continue // Skip invalid format lines
+		}
+		
+		x, err := strconv.Atoi(strings.TrimSpace(parts[0]))
 		if err != nil {
 			continue // Skip invalid coordinate lines
 		}
-		y, err := strconv.Atoi(parts[1])
+		y, err := strconv.Atoi(strings.TrimSpace(parts[1]))
 		if err != nil {
 			continue // Skip invalid coordinate lines
 		}

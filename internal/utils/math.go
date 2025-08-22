@@ -26,6 +26,8 @@ func Max(a, b int) int {
 
 // GCD returns the greatest common divisor of a and b using Euclid's algorithm.
 func GCD(a, b int) int {
+	// Use absolute values to handle negative numbers
+	a, b = Abs(a), Abs(b)
 	for b != 0 {
 		a, b = b, a%b
 	}
@@ -34,7 +36,17 @@ func GCD(a, b int) int {
 
 // LCM returns the least common multiple of a and b.
 func LCM(a, b int) int {
-	return a * b / GCD(a, b)
+	// Handle zero inputs
+	if a == 0 || b == 0 {
+		return 0
+	}
+	
+	// Use absolute values for calculation
+	absA, absB := Abs(a), Abs(b)
+	gcd := GCD(absA, absB)
+	
+	// Divide first to reduce overflow risk
+	return absA / gcd * absB
 }
 
 // Sign returns 1 for positive, -1 for negative, and 0 for zero.

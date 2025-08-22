@@ -12,6 +12,7 @@
 package day16
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -55,11 +56,17 @@ func (s *Solution) Part2() (int, error) {
 
 	// Determine which opcode number corresponds to which operation
 	opcodeMapping := s.deduceOpcodes(samples)
+	if len(opcodeMapping) != 16 {
+		return 0, fmt.Errorf("incomplete opcode mapping: decoded %d/16 opcodes", len(opcodeMapping))
+	}
 
 	// Execute the test program
 	registers := [4]int{0, 0, 0, 0}
 	for _, instruction := range program {
-		opcode := opcodeMapping[instruction[0]]
+		opcode, ok := opcodeMapping[instruction[0]]
+		if !ok {
+			return 0, fmt.Errorf("no mapping for opcode %d", instruction[0])
+		}
 		s.executeOpcode(opcode, instruction[1], instruction[2], instruction[3], &registers)
 	}
 

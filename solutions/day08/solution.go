@@ -30,14 +30,14 @@ func New(input string) *Solution {
 	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
 	fields := strings.Fields(input)
 
-	numbers := make([]int, len(fields))
-	for i, field := range fields {
+	numbers := make([]int, 0, len(fields))
+	for _, field := range fields {
 		num, err := strconv.Atoi(field)
 		if err != nil {
 			// Skip invalid numbers - this shouldn't happen with valid puzzle input
 			continue
 		}
-		numbers[i] = num
+		numbers = append(numbers, num)
 	}
 
 	return &Solution{numbers: numbers}

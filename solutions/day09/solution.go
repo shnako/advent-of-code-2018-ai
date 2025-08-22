@@ -13,6 +13,7 @@
 package day09
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -33,13 +34,20 @@ func New(input string) *Solution {
 	input = strings.ReplaceAll(strings.TrimSpace(input), "\r\n", "\n")
 	parts := strings.Fields(input)
 
+	if len(parts) < 7 {
+		// Malformed input; return empty solution to be caught by Part1/Part2 validation
+		return &Solution{}
+	}
+
 	players, err := strconv.Atoi(parts[0])
 	if err != nil {
-		players = 0 // Default value if parsing fails
+		// Invalid input; return empty solution
+		return &Solution{}
 	}
 	lastMarble, err := strconv.Atoi(parts[6])
 	if err != nil {
-		lastMarble = 0 // Default value if parsing fails
+		// Invalid input; return empty solution
+		return &Solution{}
 	}
 
 	return &Solution{
@@ -49,10 +57,16 @@ func New(input string) *Solution {
 }
 
 func (s *Solution) Part1() (int, error) {
+	if s.players == 0 || s.lastMarble == 0 {
+		return 0, fmt.Errorf("invalid input: failed to parse players or last marble")
+	}
 	return s.playGame(s.lastMarble), nil
 }
 
 func (s *Solution) Part2() (int, error) {
+	if s.players == 0 || s.lastMarble == 0 {
+		return 0, fmt.Errorf("invalid input: failed to parse players or last marble")
+	}
 	return s.playGame(s.lastMarble * 100), nil
 }
 
