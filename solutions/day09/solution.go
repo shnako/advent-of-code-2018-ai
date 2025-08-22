@@ -50,6 +50,11 @@ func New(input string) *Solution {
 		return &Solution{}
 	}
 
+	// Reject non-positive values early
+	if players <= 0 || lastMarble <= 0 {
+		return &Solution{}
+	}
+
 	return &Solution{
 		players:    players,
 		lastMarble: lastMarble,
@@ -57,15 +62,15 @@ func New(input string) *Solution {
 }
 
 func (s *Solution) Part1() (int, error) {
-	if s.players == 0 || s.lastMarble == 0 {
-		return 0, fmt.Errorf("invalid input: failed to parse players or last marble")
+	if s.players <= 0 || s.lastMarble <= 0 {
+		return 0, fmt.Errorf("invalid input: players=%d, lastMarble=%d must be positive", s.players, s.lastMarble)
 	}
 	return s.playGame(s.lastMarble), nil
 }
 
 func (s *Solution) Part2() (int, error) {
-	if s.players == 0 || s.lastMarble == 0 {
-		return 0, fmt.Errorf("invalid input: failed to parse players or last marble")
+	if s.players <= 0 || s.lastMarble <= 0 {
+		return 0, fmt.Errorf("invalid input: players=%d, lastMarble=%d must be positive", s.players, s.lastMarble)
 	}
 	return s.playGame(s.lastMarble * 100), nil
 }
