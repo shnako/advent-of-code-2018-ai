@@ -101,8 +101,7 @@ jobs:
               "solution.go",
               "solution_test.go", 
               "input.txt",
-              "puzzle.txt",
-              "cmd\main.go"
+              "puzzle.txt"
             )
             
             foreach ($file in $requiredFiles) {
