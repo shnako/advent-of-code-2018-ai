@@ -43,7 +43,8 @@
       "WebFetch(domain:www.michaelfogleman.com)",
       "Bash(gh pr checks:*)",
       "Bash(gh workflow run:*)",
-      "Bash(gh workflow:*)"
+      "Bash(gh workflow:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
